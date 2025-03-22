@@ -83,7 +83,7 @@ class Tokenizer(Token):
             while self.position < len(self.input) and self.input[self.position].isalnum() :
                 chars += self.input[self.position]
                 self.position += 1
-            if chars == "print" :
+            if chars == "println" :
                 return Print_Token
             else :
                 return Id_Token
