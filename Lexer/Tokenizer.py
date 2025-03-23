@@ -5,6 +5,9 @@ class Token() :
     def __init__(self, value):
         self.value = value
 
+    def __str__(self):
+        return f"{self.__class__.__name__}({self.value})"
+    
 class Div_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
@@ -101,11 +104,13 @@ class Tokenizer(Token):
             return None
 
     def read_Token(self) :
+        self.skip_whitespace()
         token = self.try_read_int_token()
         if token is None :
             token = self.try_read_symbol()
         if token is None :
             token = self.try_read_ID_Token()
-
         if token is None :
-            raise Exception("Invalid Token. Expected: (, ), /, *, etc... Got: " + self)
+            raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.position:]}' at position {self.position}")
+        
+        return token
