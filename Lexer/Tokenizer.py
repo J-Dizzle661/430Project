@@ -40,9 +40,11 @@ class Plus_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
-class Print_Token(Token) :
+'''  # Moving to Reserve Words file
+class Print_Token(Token) :     
     def __init__(self, value):
-        super().__init__(value)
+        super().__init__(value)'
+'''
 
 class SemiC_Token(Token) :
     def __init__(self, value):
