@@ -12,12 +12,6 @@ class Int_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
-'''  # Moving to Reserve Words file  -Jason
-class Print_Token(Token) :     
-    def __init__(self, value):
-        super().__init__(value)'
-'''
-
 class Tokenizer(Token):
     def __init__(self, input_str):
         self.input = input_str
@@ -125,6 +119,8 @@ class Tokenizer(Token):
             raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.position:]}' at position {self.position}")
         return token
     
+    ''' ## Might impliment this later to make testing easier and faster -Jason ##
+    
     def tokenize(self):
         list_tokens = []
         while (self.get_position < len(self.input)):
@@ -138,4 +134,5 @@ class Tokenizer(Token):
                 raise Exception("Invalid Token. Expected: (, ), /, *, etc... Got: " + self)
             else:
                 list_tokens.append(token)
-        return list_tokens
+        return list_tokens'
+        '''
