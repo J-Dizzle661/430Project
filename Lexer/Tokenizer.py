@@ -91,5 +91,19 @@ class Tokenizer(Token):
             token = self.try_read_ID_Token()
         if token is None :
             raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.position:]}' at position {self.position}")
-        
         return token
+    
+    def tokenize(self):
+        list_tokens = []
+        while (self.get_position < len(self.input)):
+            self.skip_whitespace()
+            token = self.try_read_int_token()
+            if token is None :
+                token = self.try_read_symbol()
+            if token is None :
+                token = self.try_read_ID_Or_Reserve_Token()
+            if token is None :
+                raise Exception("Invalid Token. Expected: (, ), /, *, etc... Got: " + self)
+            else:
+                list_tokens.append(token)
+        return list_tokens
