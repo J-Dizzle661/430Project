@@ -1,4 +1,4 @@
-from tokenizer import Tokenizer
+from Tokenizer import Tokenizer
 
 def test_tokenizer():
     testinput = "print (6) (13)"

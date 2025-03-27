@@ -1,12 +1,7 @@
 from typing import Optional
 import Operations as op
-
-class Token() :
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return f"{self.__class__.__name__}({self.value})"
+import Symbols as symb
+import Token as Token
     
 class Div_Token(Token) :
     def __init__(self, value):
@@ -68,7 +63,7 @@ class Tokenizer(Token):
     #def try_read_op_token(self) :
        # if (self.input).startswith(Int_Token, self.position) and 
 
-    def try_read_int_token(self) -> Optional[Token]:
+    def try_read_int_token(self) :
         digits = ""
 
         while self.position < len(self.input) and self.input[self.position].isdigit():
@@ -79,7 +74,7 @@ class Tokenizer(Token):
             return None
         return Int_Token(int(digits))
     
-    def try_read_ID_Token(self) -> Optional[Token]:
+    def try_read_ID_Token(self) :
         if self.position < len(self.input) and self.input[self.position].isalpha() :
             chars = "" + self.input[self.position]
             self.position += 1
@@ -93,13 +88,13 @@ class Tokenizer(Token):
         else :
             return None
         
-    def try_read_symbol(self) -> Optional[Token] :
+    def try_read_symbol(self) :
         if (self.input).startswith("(", self.position) :
             self.position += 1
-            return LP_Token
+            return symb.LP_Token
         elif (self.input).startswith(")", self.position) :
             self.position += 1
-            return RP_Token
+            return symb.RP_Token
         else :
             return None
 

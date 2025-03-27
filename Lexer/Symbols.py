@@ -1,0 +1,49 @@
+import Token as Token
+
+class Symbol(Token):
+    def __init__(self, value) :
+        super().__init__(value)
+
+class LP_Token(Symbol):
+    def __init__(self):
+        super().__init__("(")
+
+class RP_Token(Symbol):
+    def __init__(self):
+        super().__init__(")")
+
+class RBracket_Token(Symbol):
+    def __init__(self):
+        super().__init__("[")
+
+class LBracket_Token(Symbol):
+    def __init__(self):
+        super().__init__("]")
+
+class RSBracket_Token(Symbol):
+    def __init__(self):
+        super().__init__("{")
+
+class RLBracket_Token(Symbol):
+    def __init__(self):
+        super().__init__("}")
+
+class SemiColon_Token(Symbol):
+    def __init__(self):
+        super().__init__(";")
+
+class Comma_Token(Symbol):
+    def __init__(self):
+        super().__init__(",")
+
+class Colon_Token(Symbol):
+    def __init__(self):
+        super().__init__(":")
+
+class Arrow_Token(Symbol):
+    def __init__(self):
+        super().__init__("=>")
+
+class Star_Token(Symbol):
+    def __init__(self):
+        super().__init__("*")
