@@ -60,9 +60,14 @@ class class_token(ReserveWord):
     def __init__(self):
         super.__init__('class')
 
+class Int_token(ReserveWord):
+    def init(self):
+        super().init('Int')
 
+class Boolean_token(ReserveWord):
+    def init(self):
+        super().init('Boolean')
 
-
-
-
-
+class Void_token(ReserveWord):
+    def init(self):
+        super().init('Void')
