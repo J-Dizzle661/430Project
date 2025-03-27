@@ -2,6 +2,7 @@ from typing import Optional
 import Operations as op
 import Symbols as symb
 import Token as Token
+import ReserveWords as res
     
 class Div_Token(Token) :
     def __init__(self, value):
@@ -84,7 +85,7 @@ class Tokenizer(Token):
                 chars += self.input[self.position]
                 self.position += 1
             if chars == "println" :
-                return Print_Token
+                return res.print_token()
             else :
                 return Id_Token
         else :
@@ -93,10 +94,37 @@ class Tokenizer(Token):
     def try_read_symbol(self) :
         if (self.input).startswith("(", self.position) :
             self.position += 1
-            return symb.LP_Token
+            return symb.LP_Token()
         elif (self.input).startswith(")", self.position) :
             self.position += 1
-            return symb.RP_Token
+            return symb.RP_Token()
+        elif (self.input).startswith("[", self.position) :
+            self.position += 1
+            return symb.LBracket_Token()
+        elif (self.input).startswith("]", self.position) :
+            self.position += 1
+            return symb.RBracket_Token()
+        elif (self.input).startswith("{", self.position) :
+            self.position += 1
+            return symb.LSBracket_Token()
+        elif (self.input).startswith("}", self.position) :
+            self.position += 1
+            return symb.RSBracket_Token()
+        elif (self.input).startswith("=>", self.position) :
+            self.position += 1
+            return symb.Arrow_Token()
+        elif (self.input).startswith(";", self.position) :
+            self.position += 1
+            return symb.SemiColon_Token()
+        elif (self.input).startswith(",", self.position) :
+            self.position += 1
+            return symb.Comma_Token()
+        elif (self.input).startswith(":", self.position) :
+            self.position += 1
+            return symb.Colon_Token()
+        elif (self.input).startswith("*", self.position) :
+            self.position += 1
+            return symb.Star_Token()
         else :
             return None
 

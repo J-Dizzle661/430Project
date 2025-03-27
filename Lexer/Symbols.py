@@ -24,7 +24,7 @@ class RSBracket_Token(Symbol):
     def __init__(self):
         super().__init__("{")
 
-class RLBracket_Token(Symbol):
+class LSBracket_Token(Symbol):
     def __init__(self):
         super().__init__("}")
 
