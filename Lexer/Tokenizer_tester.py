@@ -1,7 +1,7 @@
 from Tokenizer import Tokenizer
 
 def test_tokenizer():
-    testinput = "println ( )[ ]{ } ; , : => * / = + -"
+    testinput = "println ( )[ ]{ } ; , : => * / = + -  myVar this false true otherVar"
     tokenizer = Tokenizer(testinput)
 
     try:

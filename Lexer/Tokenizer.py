@@ -61,7 +61,7 @@ class Tokenizer(Token):
             return None
         return Int_Token(int(digits))
     
-    def try_read_ID_Token(self) :
+    def try_read_ID_Or_Reserve_Token(self) :
         if self.position < len(self.input) and self.input[self.position].isalpha() :
             chars = "" + self.input[self.position]
             self.position += 1
@@ -70,8 +70,40 @@ class Tokenizer(Token):
                 self.position += 1
             if chars == "println" :
                 return res.print_token()
+            elif chars == 'this' :
+                return res.this_token()
+            elif chars == 'true' :
+                return res.true_token()
+            elif chars == 'false' :
+                return res.false_token()
+            elif chars == 'new' :
+                return res.new_token()
+            elif chars == 'while' :
+                return res.while_token()
+            elif chars == 'break' :
+                return res.break_token()
+            elif chars == 'return' :
+                return res.return_token()
+            elif chars == 'if' :
+                return res.if_token()
+            elif chars == 'else' :
+                return res.else_token()
+            elif chars == 'method' :
+                return res.method_token()
+            elif chars == 'init' :
+                return res.init_token()
+            elif chars == 'super' :
+                return res.super_token()
+            elif chars == 'class' :
+                return res.this_token()
+            elif chars == 'Int' :
+                return res.Int_token()
+            elif chars == 'Boolean' :
+                return res.Boolean_token()
+            elif chars == 'Void' :
+                return res.Void_token()            
             else :
-                return Id_Token
+                return Id_Token(chars)
         else :
             return None
         
@@ -84,7 +116,7 @@ class Tokenizer(Token):
 
     def read_Token(self) :
         self.skip_whitespace()
-        token = self.try_read_int_token()
+        token = self.try_read_ID_Or_Reserve_Token()
         if token is None :
             token = self.try_read_symbol()
         if token is None :
