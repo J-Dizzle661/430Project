@@ -1,7 +1,7 @@
 from Tokenizer import Tokenizer
 
 def test_tokenizer():
-    testinput = "print (6) (13)"
+    testinput = "print ( )[ ]{ } ; , : => * / = + -"
     tokenizer = Tokenizer(testinput)
 
     try:

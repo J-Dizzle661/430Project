@@ -1,38 +1,14 @@
 from typing import Optional
+from Token import Token
 import Operations as op
 import Symbols as symb
-import Token as Token
 import ReserveWords as res
     
-class Div_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-class Equals_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
 class Id_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
 class Int_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-class LP_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-class RP_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-class Minus_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-class Plus_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
@@ -42,19 +18,27 @@ class Print_Token(Token) :
         super().__init__(value)'
 '''
 
-class SemiC_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-class Star_Token(Token) :
-    def __init__(self, value):
-        super().__init__(value)
-
-
 class Tokenizer(Token):
     def __init__(self, input_str):
         self.input = input_str
         self.position = 0
+        self.symbol_map = {
+            "(": symb.LP_Token,
+            ")": symb.RP_Token,
+            "[": symb.LBracket_Token,
+            "]": symb.RBracket_Token,
+            "{": symb.RSBracket_Token,
+            "}": symb.LSBracket_Token,
+            ";": symb.SemiColon_Token,
+            ",": symb.Comma_Token,
+            ":": symb.Colon_Token,
+            "=>": symb.Arrow_Token,
+            "*": symb.Star_Token,
+            "/": symb.Div_Token,
+            "=": symb.Equals_Token,
+            "+": symb.Plus_Token,
+            "-": symb.Minus_Token,
+        }
 
     def get_position(self) :
         return self.position
@@ -91,51 +75,12 @@ class Tokenizer(Token):
         else :
             return None
         
-    def try_read_symbol(self) :
-        if (self.input).startswith("(", self.position) :
-            self.position += 1
-            return symb.LP_Token()
-        elif (self.input).startswith(")", self.position) :
-            self.position += 1
-            return symb.RP_Token()
-        elif (self.input).startswith("[", self.position) :
-            self.position += 1
-            return symb.LBracket_Token()
-        elif (self.input).startswith("]", self.position) :
-            self.position += 1
-            return symb.RBracket_Token()
-        elif (self.input).startswith("{", self.position) :
-            self.position += 1
-            return symb.LSBracket_Token()
-        elif (self.input).startswith("}", self.position) :
-            self.position += 1
-            return symb.RSBracket_Token()
-        elif (self.input).startswith("=>", self.position) :
-            self.position += 1
-            return symb.Arrow_Token()
-        elif (self.input).startswith(";", self.position) :
-            self.position += 1
-            return symb.SemiColon_Token()
-        elif (self.input).startswith(",", self.position) :
-            self.position += 1
-            return symb.Comma_Token()
-        elif (self.input).startswith(":", self.position) :
-            self.position += 1
-            return symb.Colon_Token()
-        elif (self.input).startswith("*", self.position) :
-            self.position += 1
-            return symb.Star_Token()
-        elif (self.input).startswith("/", self.position) :
-            self.position += 1
-            return symb.Div_Token()
-        elif (self.input).startswith("+", self.position) :
-            self.position += 1
-            return symb.Plus_Token()
-        elif (self.input).startswith("-", self.position) :
-            self.position += 1
-            return symb.Minus_Token()
-        else :
-            return None
+    def try_read_symbol(self):
+        for symbol in sorted(self.symbol_map.keys(), key=len, reverse=True): 
+            if self.input.startswith(symbol, self.position):
+                self.position += len(symbol)
+                return self.symbol_map[symbol]()  
+        return None
 
     def read_Token(self) :
         self.skip_whitespace()

@@ -1,4 +1,4 @@
-import Token as Token
+from Token import Token
 
 class Symbol(Token):
     def __init__(self, value) :
@@ -59,3 +59,7 @@ class Plus_Token(Symbol):
 class Minus_Token(Symbol):
     def __init__(self):
         super().__init__("-")
+
+class Equals_Token(Symbol):
+    def __init__(self):
+        super().__init__("=")
