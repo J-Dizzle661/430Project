@@ -125,6 +125,15 @@ class Tokenizer(Token):
         elif (self.input).startswith("*", self.position) :
             self.position += 1
             return symb.Star_Token()
+        elif (self.input).startswith("/", self.position) :
+            self.position += 1
+            return symb.Div_Token()
+        elif (self.input).startswith("+", self.position) :
+            self.position += 1
+            return symb.Plus_Token()
+        elif (self.input).startswith("-", self.position) :
+            self.position += 1
+            return symb.Minus_Token()
         else :
             return None
 

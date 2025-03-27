@@ -47,3 +47,15 @@ class Arrow_Token(Symbol):
 class Star_Token(Symbol):
     def __init__(self):
         super().__init__("*")
+
+class Div_Token(Symbol):
+    def __init__(self):
+        super().__init__("/")
+
+class Plus_Token(Symbol):
+    def __init__(self):
+        super().__init__("+")
+
+class Minus_Token(Symbol):
+    def __init__(self):
+        super().__init__("-")
