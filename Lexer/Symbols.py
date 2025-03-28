@@ -63,3 +63,7 @@ class Minus_Token(Symbol):
 class Equals_Token(Symbol):
     def __init__(self):
         super().__init__("=")
+
+class Dot_Token(Symbol):
+    def __init__(self):
+        super().__init__('.')
