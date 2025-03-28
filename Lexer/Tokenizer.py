@@ -114,11 +114,11 @@ class Tokenizer(Token):
         while (self.get_position() < len(self.input)):
             self.skip_whitespace()
             token = self.try_read_int_token()
-            if token is None :
+            if token is None:
                 token = self.try_read_symbol()
-            if token is None :
+            if token is None:
                 token = self.try_read_ID_Or_Reserve_Token()
-            if token is None :
+            if token is None:
                 raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.get_position() - 1]}' at position {self.get_position()}")
             else:
                 list_tokens.append(str(token))

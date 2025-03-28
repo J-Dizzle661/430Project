@@ -35,12 +35,16 @@ class TestTokenizer(unittest.TestCase):
         dummy_IDs = Tokenizer('foo bar baz')
         self.assertEqual(['Id_Token(foo)', 'Id_Token(bar)', 'Id_Token(baz)'], dummy_IDs.read_Tokens())
 
+    def test_int_tokens(self):
+        dummy_ints = Tokenizer('34 6 2')
+        self.assertEqual(['Int_Token(34)', 'Int_Token(6)', 'Int_Token(2)'], dummy_ints.read_Tokens())
+
     
 if __name__ == '__main__':
     unittest.main()
     
 def test_tokenizer():
-    testinput = "foo bar baz"
+    testinput = "34 6 2"
     tokenizer = Tokenizer(testinput)
     print(tokenizer.read_Tokens()) 
 
