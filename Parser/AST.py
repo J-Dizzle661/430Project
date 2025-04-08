@@ -1,7 +1,8 @@
 from Token import Token 
 
 class AST:
-    pass
+    def __init__(self):
+        pass
 
 class Node:
     def __init__(self, token):
@@ -17,4 +18,4 @@ class Node:
             self.children.append(child)
             child.parent = self
         else:
-            raise Exception('Tried adding ', child.__str__(), ' to ' ,self.__str__(), ' but not vaild AST Node!')
+            raise Exception('Tried adding ', child.__str__(), ' to ' ,self.__str__(), ' but not a vaild AST Node!')
