@@ -1,8 +1,9 @@
-from Token import Token 
+from Lexer.Token import Token
 
 class AST:
     def __init__(self):
-        pass
+        self.root = None
+        
 
 class Node:
     def __init__(self, token):
