@@ -15,7 +15,7 @@ class Node:
         return f"{self.__class__.__name__}({self.value})"
 
     def add_child(self, child):
-        if instanceof(child, Token):
+        if isinstance(child, Token):
             self.children.append(child)
             child.parent = self
         else:
