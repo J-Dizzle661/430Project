@@ -2,6 +2,8 @@ from Tokenizer import Tokenizer, Int_Token
 from Token import Token
 from ReserveWords import true_token, false_token, print_token, new_token, this_token, Int_token
 from AST import Node
+from Tokenizer import Tokenizer
+from Token import Token
 
 class Parser():
     def __init__(self, tokens):
