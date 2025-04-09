@@ -1,5 +1,6 @@
-from Parser.AST import Node
-from Lexer.ReserveWords import Void_token
+from ReserveWords import Void_token
+from AST import Node
+#import Lexer
 import unittest
 
 class AST_tester(unittest.TestCase):
