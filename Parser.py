@@ -1,6 +1,6 @@
-from Lexer.Tokenizer import Tokenizer
-from Lexer.Token import Token
-from Lexer.ReserveWords import ReserveWord
+from Tokenizer import Tokenizer, Int_Token
+from Token import Token
+from ReserveWords import true_token, false_token, print_token, new_token, this_token, Int_token
 from AST import Node
 
 class Parser():
@@ -17,31 +17,27 @@ class Parser():
     def primary_exp (self):
         token = self.read_token()
 
-        if isinstance(token, ReserveWord.Int_Token):
+        if isinstance(token, Int_token):
             self.position += 1 
             return Node(token)
         
-        elif isinstance(token, ReserveWord.Id_Token):
-            self.position += 1 
-            return Node(token)
-        
-        elif isinstance(token, ReserveWord.this_Token):
+        elif isinstance(token, this_token):
             self.position += 1 
             return Node(token)
 
-        elif isinstance(token, ReserveWord.true_Token):
+        elif isinstance(token, true_token):
             self.position += 1 
             return Node(token)
         
-        elif isinstance(token, ReserveWord.false_Token):
+        elif isinstance(token, false_token):
             self.position += 1 
             return Node(token)
         
-        elif isinstance(token, ReserveWord.println_Token):
+        elif isinstance(token, print_token):
             self.position += 1 
             return Node(token)
         
-        elif isinstance(token, ReserveWord.new_Token):
+        elif isinstance(token, new_token):
             self.position += 1 
             return Node(token)
         
