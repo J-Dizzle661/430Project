@@ -119,7 +119,7 @@ class Tokenizer(Token):
             if token is None:
                 token = self.try_read_ID_Or_Reserve_Token()
             if token is None:
-                raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.get_position() - 1]}' at position {self.get_position()}")
+                raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.position - 1]}' at position {self.position - 1}")
             else:
                 list_tokens.append(str(token))
         return list_tokens
