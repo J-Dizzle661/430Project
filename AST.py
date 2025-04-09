@@ -1,4 +1,4 @@
-from Lexer.Token import Token
+from Token import Token
 
 class AST:
     def __init__(self):
