@@ -1,5 +1,5 @@
-from Lexer.Tokenizer import Tokenizer
-from Lexer.Token import Token
+from Tokenizer import Tokenizer
+from Token import Token
 
 class Parser():
     def __init__(self, tokens):
@@ -12,4 +12,4 @@ class Parser():
         else:
           return self.tokens[self.position]
         
-    def 
+    
