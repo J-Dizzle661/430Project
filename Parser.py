@@ -1,9 +1,28 @@
-from Tokenizer import Tokenizer, Int_Token
-from Token import Token
-from ReserveWords import true_token, false_token, print_token, new_token, this_token, Int_token
+from Tokenizer import Tokenizer, Id_Token
+from ReserveWords import Int_token
+from Symbols import LP_Token, RP_Token
 from AST import Node
-from Tokenizer import Tokenizer
-from Token import Token
+from dataclasses import dataclass
+
+@dataclass
+class ParseResult:
+    result: any
+    next_pos: int
+
+class Exp(Node):
+    pass
+
+@dataclass
+class IdExp(Exp):
+    name:str
+
+@dataclass
+class IntExp(Exp):
+    value: int
+
+class ParseException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 class Parser():
     def __init__(self, tokens):
@@ -16,31 +35,18 @@ class Parser():
         else:
           return self.tokens[self.position]
         
-    def primary_exp (self):
-        token = self.read_token()
+    def primary_exp(self, start_pos):
+        token = self.get_token(start_pos)
+        if isinstance(token, Id_Token):
+            return ParseResult(IdExp(token.name), start_pos + 1)
+        elif isinstance(token, Int_token):
+            return ParseResult(IntExp(token.value), start_pos + 1)
+        elif isinstance(token, LP_Token):
+            e = self.exp(start_pos + 1)
+            self.assert_token_is(e.next_pos, RP_Token())
+            return ParseResult(e.result, e.next_pos + 1)
+        else:
+            raise ParseException(f"Expected primary expression at position: {start_pos}")
 
-        if isinstance(token, Int_token):
-            self.position += 1 
-            return Node(token)
-        
-        elif isinstance(token, this_token):
-            self.position += 1 
-            return Node(token)
-
-        elif isinstance(token, true_token):
-            self.position += 1 
-            return Node(token)
-        
-        elif isinstance(token, false_token):
-            self.position += 1 
-            return Node(token)
-        
-        elif isinstance(token, print_token):
-            self.position += 1 
-            return Node(token)
-        
-        elif isinstance(token, new_token):
-            self.position += 1 
-            return Node(token)
-        
-        raise Exception(f"Token Unexpected: {token}")
+    def mult_exp(self, start_pos):
+        m = self.primary_exp(start_pos)
