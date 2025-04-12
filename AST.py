@@ -1,8 +1,8 @@
 from Token import Token
 
-class AST:
-    def __init__(self):
-        self.root = None
+class Node_Type:
+    def __init__(self, value):
+        self.value = value
         
 
 class Node:
