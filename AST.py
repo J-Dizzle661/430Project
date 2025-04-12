@@ -1,13 +1,16 @@
 from Token import Token
 
+
+''' Probably gonna delete this later, not useful
 class Node_Type:
     def __init__(self, value):
         self.value = value
+'''
         
 
 class Node:
-    def __init__(self, token):
-        self.token = token
+    def __init__(self, production):
+        self.value = production
         self.parent = None
         self.children = []
 
