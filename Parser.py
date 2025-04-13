@@ -1,6 +1,7 @@
 from Tokenizer import Tokenizer, Id_Token
 from ReserveWords import Int_token
-from Symbols import LP_Token, RP_Token
+from Symbols import LP_Token, RP_Token, Star_Token, Div_Token, Plus_Token, Minus_Token
+from Operations import Op, MultOp, DivOp, PlusOp, MinusOp
 from AST import Node
 from dataclasses import dataclass
 
@@ -20,6 +21,12 @@ class IdExp(Exp):
 class IntExp(Exp):
     value: int
 
+@dataclass
+class BinOpExp(Exp):
+    left: Exp
+    op: Op
+    right: Exp
+
 class ParseException(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -36,7 +43,7 @@ class Parser():
           return self.tokens[self.position]
         
     def primary_exp(self, start_pos):
-        token = self.get_token(start_pos)
+        token = self.read_token(start_pos)
         if isinstance(token, Id_Token):
             return ParseResult(IdExp(token.name), start_pos + 1)
         elif isinstance(token, Int_token):
@@ -50,3 +57,44 @@ class Parser():
 
     def mult_exp(self, start_pos):
         m = self.primary_exp(start_pos)
+        result = m.result
+        should_run = True
+        pos = m.next_pos
+        while should_run:
+            try:
+                t= self.read_token_token(pos)
+                if isinstance(t, Star_Token):
+                    op = MultOp()
+                elif isinstance(t, Div_Token):
+                    op = DivOp()
+                else: 
+                    raise ParseException("Expected * or /")
+                m2 = self.primary_exp(pos + 1)
+                result = BinOpExp(result, op, m2.result)
+                pos = m2.next_pos
+            except ParseException:
+                should_run = False
+        return ParseResult(result, pos)
+
+    def add_exp(self, start_pos):
+        m = self.mult_exp(start_pos)
+        result = m.result
+        pos = m.next_pos
+        while True:
+            try: 
+                t = self.read_token(pos)
+                if isinstance(t, Plus_Token):
+                    op = PlusOp()
+                elif isinstance(t, Minus_Token):
+                    op = MinusOp()
+                else: 
+                    raise ParseException("Expected + or -")
+                m2 = self.mult_exp(pos+1)
+                result = BinOpExp(result, op, m2.result)
+                pos = m2.next_pos
+            except ParseException:
+                break
+        return ParseResult(result, pos)
+    
+    def exp(self, start_pos):
+        return self.add_exp(start_pos)
