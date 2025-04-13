@@ -1,0 +1,28 @@
+class Type:
+    -class Int_type
+    -class Boolean_type
+    -class void_type
+
+class Stmt:
+    -class vardec_stmt
+    -class assign_stmt
+    -class while_stmt
+    -class break_stmt
+    -class return_stmt
+    -class if_stmt 
+    -class else_stmt
+    -class block_stmt
+
+class Exp:
+    -class call_exp
+    -class comma_exp
+    -class mult_exp
+    -class add_exp
+    -class primary_exp
+
+class MethodDef:
+    -class constructor_method
+
+class ClassDef:
+
+class Program:
