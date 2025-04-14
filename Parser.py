@@ -11,6 +11,7 @@ class ParseResult:
     result: any
     next_pos: int
 
+
 class Exp(Node):
     pass
 
@@ -19,8 +20,12 @@ class IdExp(Exp):
     name:str
 
 @dataclass
-class IntExp(Exp):
+class IntLiteral(Exp):
     value: int
+
+@dataclass
+class BooleanLiteral(Exp):
+    value: bool
 
 @dataclass
 class BinOpExp(Exp):
@@ -69,7 +74,7 @@ class Parser():
         if isinstance(token, Id_Token):
             return ParseResult(IdExp(token.name), start_pos + 1)
         elif isinstance(token, Int_token):
-            return ParseResult(IntExp(token.value), start_pos + 1)
+            return ParseResult(IntLiteral(token.value), start_pos + 1)
         elif isinstance(token, LP_Token):
             e = self.exp(start_pos + 1)
             self.assert_token_is(e.next_pos, RP_Token())
@@ -228,3 +233,26 @@ class Parser():
             vardecs.append(vd.result)
             pos = vd.next_pos
         return ParseResult(vardecs, pos)
+    
+def parse_tokens(tokens): # will be some if-else or pattern match to call each appropriate try_parse function below:
+    current_postion =0               # this will keep track of position in token list
+
+def try_parse_Exp(): # can return a call exp, comma exp, mult exp, add exp
+    try_parse_add_exp()            # or int literal, bool literal, or void  
+
+def try_parse_Stmt():# can return any kind of stmt
+    pass
+
+def try_parse_Method(): # can return either a method_def or an an constructor_method
+    pass
+
+def try_parse_class_def(): # just returns a class_def
+    pass
+
+def make_program(): # adds all the class_defs and stmts
+    pass
+
+def makeNode(someProduction):
+    #do something that takes in a production
+    #and spits out a node, which is then added to the AST
+    return some_node  
