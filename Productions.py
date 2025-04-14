@@ -108,9 +108,10 @@ class add_exp(Exp):
 
 
 class MethodDef:
-    def __init__(self, method_name, comma_vardec, stmts): # comma_vardec object, stmts should be a one or more list
+    def __init__(self, method_name, comma_vardec, type, stmts): # comma_vardec object, stmts should be a one or more list
         self.method_name = method_name
         self.comma_vardec = comma_vardec
+        self.type = type
         self.stmts = stmts
         
 
