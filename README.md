@@ -1,4 +1,4 @@
-# 430Project
+430Project
 
 Language Design Proposal: pOOP Improved Syntax
 

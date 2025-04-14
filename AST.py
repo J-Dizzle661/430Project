@@ -8,6 +8,11 @@ class Node_Type:
 '''
         
 
+#Dewey advised against a node class:
+#The problems with this is because if you see a node object, its harder to work with
+# Preffered:
+# class Plus_Node, class Int_Literal:
+
 class Node:
     def __init__(self, production):
         self.value = production
