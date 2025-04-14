@@ -1,4 +1,4 @@
-
+from Operations import *
 
 class Production:
     def __init__(self):
@@ -9,11 +9,11 @@ class Type_prod:
         self.type = type
         self.value = value
 
-class Int_Type(Type_prod):
+class Int_Literal(Type_prod):
     def __init__(self, value):
         super().__init__(self, value)
 
-class Boolean_Type(Type_prod):
+class Boolean_Literal(Type_prod):
     def __init__(self, value):
         super().__init__(self, value)
 
@@ -31,6 +31,10 @@ class vardec_stmt(Stmt):
     def __init__(self, type, variable):
         self.type = type
         self.variable = variable
+
+class comma_vardec_stmt(Stmt):  #vardecs should be a list 
+    def __init__(self, vardecs):
+        self.vardecs
     
 
 class assign_stmt(Stmt):
@@ -72,31 +76,52 @@ class exp_stmt(Stmt): #might delete
 
 
 class Exp:
-    pass
+    def __init__(self, left_exp, op = None, right_exp = None):
 
+        if ((op == None and right_exp != None) or (op != None and right_exp == None)):
+            raise Exception('Not a valid Expression')
+        
+        self.left_exp = left_exp
+        self.op = op
+        self.left_exp - right_exp
+
+'''
+class primary_exp(Exp):
+    def __init__(self, left_exp, op=None, right_exp=None):   ## Not sure if necessary, might delete
+        super().__init__(left_exp, op, right_exp)
+'''
+        
 class call_exp(Exp):
-    pass
+    def __init__(self, left_exp, right_exp):
+        super().__init__(left_exp, DotOp(), right_exp)
 
 class comma_exp(Exp):
-    pass
+   def __init__(self, left_exp, right_exp):
+        super().__init__(left_exp, Comma_Op(), right_exp)
 
 class mult_exp(Exp):
-    pass
+    def __init__(self, left_exp, op, right_exp): #the op in construct should be a mult_op() or div_op()
+        super().__init__(left_exp, op, right_exp)
 
 class add_exp(Exp):
-    pass
+    def __init__(self, left_exp, op, right_exp): #the op in construct should be a plus_op() or minus_op()
+        super().__init__(left_exp, op, right_exp)
 
-class primary_exp(Exp):
-    pass
 
 
 
 
 class MethodDef:
-    pass
+    def __init__(self, method_name, comma_vardec, stmts): # comma_vardec object, stmts should be a one or more list
+        self.method_name = method_name
+        self.comma_vardec = comma_vardec
+        self.stmts = stmts
+        
 
 class contstructor_method(MethodDef):
-    pass
+    def __init__(self, comma_vardec, comma_exp, stmts):
+        super().__init__('init', comma_vardec, stmts)
+        self.comma_exp = comma_exp
 
 
 
@@ -107,8 +132,11 @@ class Variable:
 
 
 class Class_Def:
-    def __init__(self):
-        pass
+    def __init__(self, class_name, vardecs, methods, extends_name = None):
+        self.class_name = class_name
+        self.vardecs = vardecs
+        self.methods = methods
+        self.extends_name = extends_name
 
 class Program:
     def __init__(self, stmts, classes): #stmts  and class_defs should probably be lists
