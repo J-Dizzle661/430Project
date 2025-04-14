@@ -67,3 +67,19 @@ class Equals_Token(Symbol):
 class Dot_Token(Symbol):
     def __init__(self):
         super().__init__('.')
+
+class Less_Than_Token(Symbol):
+    def __init__(self):
+        super().__init__('<')
+
+class Greater_Than_Token(Symbol):
+    def __init__(self):
+        super().__init__('>')
+
+class Add_Token(Symbol):
+    def __init__(self):
+        super().__init__('&&')
+
+class Or_Token(Symbol):
+    def __init__(self):
+        super().__init__('||')
