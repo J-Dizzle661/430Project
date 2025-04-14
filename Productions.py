@@ -4,24 +4,6 @@ class Production:
     def __init__(self):
         pass
 
-class Type_prod:
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value
-
-class Int_Literal(Type_prod):
-    def __init__(self, value):
-        super().__init__(self, value)
-
-class Boolean_Literal(Type_prod):
-    def __init__(self, value):
-        super().__init__(self, value)
-
-class Void_Type(Type_prod):
-    def __init__(self):
-        super().__init__(self, 'Void')
-
-
 
 class Stmt:
     def __init__(self):
@@ -58,20 +40,17 @@ class return_stmt(Stmt):
         
 
 class if_stmt(Stmt):
-    def __init__(self, guard, stmt):
+    def __init__(self, guard, stmts): # stmts is a list 
         self.guard = guard #this is the condition
-        self.stmt = stmt
-
-class else_stmt(Stmt):
-    def __init__(self, stmt):
-        self.stmt = stmt
-
-class block_stmt(Stmt):
-    def __init__(self, stmts):
         self.stmts = stmts
 
-class exp_stmt(Stmt): #might delete
-    pass
+class else_stmt(Stmt):
+    def __init__(self, stmts):
+        self.stmt = stmts
+
+class block_stmt(Stmt):
+    def __init__(self, stmts): #list of stmts
+        self.stmts = stmts
 
 
 
@@ -84,6 +63,23 @@ class Exp:
         self.left_exp = left_exp
         self.op = op
         self.left_exp - right_exp
+
+
+class Type_prod(Exp):
+    def __init__(self, value):
+        super().__init__(value)
+
+class Int_Literal(Type_prod):
+    def __init__(self, value):
+        super().__init__(value)
+
+class Boolean_Literal(Type_prod):
+    def __init__(self, value):
+        super().__init__(value)
+
+class Void(Type_prod):
+    def __init__(self):
+        super().__init__('Void')
 
 '''
 class primary_exp(Exp):

@@ -1,17 +1,10 @@
 from Token import Token
 
-
-''' Probably gonna delete this later, not useful
-class Node_Type:
+class Node:
     def __init__(self, value):
         self.value = value
 '''
         
-
-#Dewey advised against a node class:
-#The problems with this is because if you see a node object, its harder to work with
-# Preffered:
-# class Plus_Node, class Int_Literal:
 
 class Node:
     def __init__(self, production):
