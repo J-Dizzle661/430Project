@@ -26,7 +26,7 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual(['LP_Token(()', 'RP_Token())', 'LBracket_Token(])', 'RBracket_Token([)', 'RSBracket_Token({)',
                           'LSBracket_Token(})', 'SemiColon_Token(;)', 'Comma_Token(,)'], first_half_symbols.read_Tokens())
 
-    def  test_symbols_two(self):
+    def test_symbols_two(self):
         second_half_symbols = Tokenizer(': => * / + - = .')
         self.assertEqual(['Colon_Token(:)', 'Arrow_Token(=>)', 'Star_Token(*)', 'Div_Token(/)', 'Plus_Token(+)',
                          'Minus_Token(-)', 'Equals_Token(=)', 'Dot_Token(.)'], second_half_symbols.read_Tokens())
@@ -44,9 +44,11 @@ if __name__ == '__main__':
     unittest.main()
     
 def test_tokenizer():
-    testinput = "34 6 2"
+    testinput = "34 6 2 5"
     tokenizer = Tokenizer(testinput)
     print(tokenizer.read_Tokens()) 
+
+
 
 
 ''' 

@@ -1,8 +1,9 @@
 from Tokenizer import Tokenizer, Id_Token
-from ReserveWords import Int_token
-from Symbols import LP_Token, RP_Token, Star_Token, Div_Token, Plus_Token, Minus_Token
-from Operations import Op, MultOp, DivOp, PlusOp, MinusOp
+from ReserveWords import *
+from Symbols import *
+from Operations import *
 from AST import Node
+from Productions import *
 from dataclasses import dataclass
 
 @dataclass
@@ -42,6 +43,27 @@ class Parser():
         else:
           return self.tokens[self.position]
         
+    def assert_token_is(self, pos, expected_token):
+        actual_token = self.read_token(pos)
+        if not isinstance(actual_token, type(expected_token)):
+            raise ParseException(
+                f"Expected token {type(expected_token).__name__} at position {pos}, "
+                f"but found {type(actual_token).__name__}"
+        )
+
+    def type_parser(tokens, pos):
+        if pos >= len(tokens):
+            raise ParseException("Expected type but ran out of tokens")
+        token = tokens[pos]
+        if isinstance(token, Int_token):
+            return ParseResult(Int_Type("Int"), pos + 1)
+        elif isinstance(token, Boolean_token):
+            return ParseResult(Boolean_Type("Boolean"), pos + 1)
+        elif isinstance(token, Void_token):
+            return ParseResult(Void_Type(), pos + 1)
+        else:
+            raise ParseException(f"Expected type at position {pos}, but got: {token}")
+            
     def primary_exp(self, start_pos):
         token = self.read_token(start_pos)
         if isinstance(token, Id_Token):
@@ -98,3 +120,111 @@ class Parser():
     
     def exp(self, start_pos):
         return self.add_exp(start_pos)
+    
+    def vardec_parser(self, pos):
+        type_result = self.type_parser(pos)
+        id_token = self.read_token(type_result.next_pos)
+
+        if not isinstance(id_token, Id_Token):
+            raise ParseException(f"Expected variable name at {type_result.next_pos}")
+
+        var = Variable(id_token.name)
+        return ParseResult(vardec_stmt(type_result.result, var), type_result.next_pos + 1)
+
+
+    def stmt(self, start_pos):
+        t = self.read_token(start_pos)
+
+        # vardec
+        try:
+            type_result = self.type_parser(start_pos)
+            id_token = self.read_token(type_result.next_pos)
+            if isinstance(id_token, Id_Token):
+                self.assert_token_is(type_result.next_pos + 1, SemiColon_Token())
+                return ParseResult(
+                    vardec_stmt(type_result.result, Variable(id_token.name)),
+                    type_result.next_pos + 2
+                )
+        except ParseException:
+            pass
+
+        # assignment
+        if isinstance(t, Id_Token):
+            next_token = self.read_token(start_pos + 1)
+            if isinstance(next_token, Equals_Token):
+                e = self.exp(start_pos + 2)
+                self.assert_token_is(e.next_pos, SemiColon_Token())
+                return ParseResult(assign_stmt(Variable(t.name), e.result), e.next_pos + 1)
+
+        # while stmt
+        if isinstance(t, while_token):
+            self.assert_token_is(start_pos + 1, LP_Token())
+            cond = self.exp(start_pos + 2)
+            self.assert_token_is(cond.next_pos, RP_Token())
+            body = self.stmt(cond.next_pos + 1)
+            return ParseResult(while_stmt(cond.result, body.result), body.next_pos)
+
+        # break stmt 
+        if isinstance(t, break_token):
+            self.assert_token_is(start_pos + 1, SemiColon_Token())
+            return ParseResult(break_stmt(), start_pos + 2)
+
+        # return stmt
+        if isinstance(t, return_token):
+            next_token = self.read_token(start_pos + 1)
+            if isinstance(next_token, SemiColon_Token):
+                return ParseResult(return_stmt(None), start_pos + 2)
+            else:
+                e = self.exp(start_pos + 1)
+                self.assert_token_is(e.next_pos, SemiColon_Token())
+                return ParseResult(return_stmt(e.result), e.next_pos + 1)
+
+        # if else stmt
+        if isinstance(t, if_token):
+            self.assert_token_is(start_pos + 1, LP_Token())
+            cond = self.exp(start_pos + 2)
+            self.assert_token_is(cond.next_pos, RP_Token())
+            then_stmt = self.stmt(cond.next_pos + 1)
+            pos = then_stmt.next_pos
+            try:
+                if isinstance(self.read_token(pos), else_token):
+                    else_stmt = self.stmt(pos + 1)
+                    return ParseResult(if_stmt(cond.result, then_stmt.result, else_stmt.result), else_stmt.next_pos)
+            except ParseException:
+                pass
+            return ParseResult(if_stmt(cond.result, then_stmt.result, None), pos)
+
+        # stmt* 
+        if isinstance(t, LSBracket_Token):  # assuming LSBracket_Token = {
+            pos = start_pos + 1
+            stmts = []
+            while not isinstance(self.read_token(pos), RSBracket_Token):  # }
+                s = self.stmt(pos)
+                stmts.append(s.result)
+                pos = s.next_pos
+            return ParseResult(block_stmt(stmts), pos + 1)
+        
+        # expression stmt
+        try:
+            e = self.exp(start_pos)
+            self.assert_token_is(e.next_pos, SemiColon_Token())
+            return ParseResult(exp_stmt(e.result), e.next_pos + 1)
+        except ParseException:
+            raise ParseException(f"Invalid statement at position {start_pos}")
+
+    def comma_vardec_parser(self, pos):
+        vardecs = []
+        # First vardec
+        vd = self.vardec_parser(pos)
+        vardecs.append(vd.result)
+        pos = vd.next_pos
+
+        while pos < len(self.tokens):
+            token = self.read_token(pos)
+            if not isinstance(token, Comma_Token):
+                break  # End of comma list
+            pos += 1  # skip comma
+            vd = self.vardec_parser(pos)
+            vardecs.append(vd.result)
+            pos = vd.next_pos
+        return ParseResult(vardecs, pos)
