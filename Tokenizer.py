@@ -8,7 +8,7 @@ class Id_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
-class Int_Token(Token) :
+class Number_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
@@ -45,7 +45,7 @@ class Tokenizer(Token):
     #def try_read_op_token(self) :
        # if (self.input).startswith(Int_Token, self.position) and 
 
-    def try_read_int_token(self) :
+    def try_read_number_token(self) :
         digits = ""
 
         while self.position < len(self.input) and self.input[self.position].isdigit():
@@ -54,7 +54,7 @@ class Tokenizer(Token):
 
         if not digits:
             return None
-        return Int_Token(int(digits))
+        return Number_Token(int(digits))
     
     def try_read_ID_Or_Reserve_Token(self) :
         if self.position < len(self.input) and self.input[self.position].isalpha() :
@@ -113,7 +113,7 @@ class Tokenizer(Token):
         list_tokens = []
         while (self.get_position() < len(self.input)):
             self.skip_whitespace()
-            token = self.try_read_int_token()
+            token = self.try_read_number_token()
             if token is None:
                 token = self.try_read_symbol()
             if token is None:
@@ -127,7 +127,7 @@ class Tokenizer(Token):
     def get_tokens_as_str(self):
         tokens_str = []
 
-        for token in self.list_tokens:
+        for token in self.tokens:
             tokens_str.append(str(token))
 
         return tokens_str
