@@ -74,6 +74,12 @@ class Parser():
             raise ParseException(f"Expected type at position {pos}, but got: {token}")
 
     #comma_exp
+    def comma_exp(self, start_pos):
+        e = self.exp(start_pos+1)
+        while self.assert_token_is(e.next_pos, Comma_Token()):
+            e.next_pos += 1
+            e2 = self.exp(e.next_pos)
+            return ParseResult(comma_exp(e.result, e2.result), e2.next_pos)
 
     def primary_exp(self, start_pos):
         token = self.read_token(start_pos)
