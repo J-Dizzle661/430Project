@@ -232,6 +232,187 @@ class Parser():
             pos = vd.next_pos
 
         return ParseResult(vardecs, pos)
+    
+    def methoddef(self, start_pos):
+        pos = start_pos
+
+        token = self.read_token(pos)
+        if not isinstance(token, method_token):
+            raise ParseException(f"Expected 'method' at position {pos}")
+        pos += 1
+
+        token = self.read_token(pos)
+        if not isinstance(token, Id_Token):
+            raise ParseException(f"Expected method name at position {pos}")
+        method_name = token.name
+        pos += 1
+
+        self.assert_token_is(pos, LP_Token())
+        pos += 1
+
+        params_result = self.comma_vardec_parser(pos)
+        params = params_result.result
+        pos = params_result.next_pos
+
+        self.assert_token_is(pos, RP_Token())
+        pos += 1
+
+        type_result = self.type_parser(pos)
+        return_type = type_result.result
+        pos = type_result.next_pos
+
+        self.assert_token_is(pos, LSBracket_Token())  # Adjusted to match LSBracket_Token
+        pos += 1
+
+        stmts = []
+        while not isinstance(self.read_token(pos), RSBracket_Token):
+            stmt_result = self.stmt(pos)
+            stmts.append(stmt_result.result)
+            pos = stmt_result.next_pos
+
+        self.assert_token_is(pos, RSBracket_Token())  # Adjusted to match RSBracket_Token
+        pos += 1
+
+        method = MethodDef(method_name, params, return_type, stmts)
+        return ParseResult(method, pos)
+    
+    def constructor(self, pos):
+        # 'constructor'
+        token = self.read_token(pos)
+        if token.value != "constructor":
+            raise ParseException(f"Expected 'constructor' at position {pos}")
+        pos += 1
+
+        # '('
+        self.assert_token_is(pos, LP_Token())
+        pos += 1
+
+        # comma_vardec
+        params_result = self.comma_vardec_parser(pos)
+        comma_vardec = params_result.result
+        pos = params_result.next_pos
+
+        # ')'
+        self.assert_token_is(pos, RP_Token())
+        pos += 1
+
+        # 'super'
+        self.assert_token_is(pos, Super_Token())
+        pos += 1
+
+        # '('
+        self.assert_token_is(pos, LP_Token())
+        pos += 1
+
+        # comma_exp
+        comma_exp_result = self.comma_exp(pos)
+        super_args = comma_exp_result.result
+        pos = comma_exp_result.next_pos
+
+        # ')'
+        self.assert_token_is(pos, RP_Token())
+        pos += 1
+
+        # '{'
+        self.assert_token_is(pos, LSBracket_Token())
+        pos += 1
+
+        # parse stmt*
+        stmts = []
+        while not isinstance(self.read_token(pos), RSBracket_Token()):
+            stmt_result = self.stmt(pos)
+            stmts.append(stmt_result.result)
+            pos = stmt_result.next_pos
+
+        # '}'
+        self.assert_token_is(pos, RSBracket_Token())
+        pos += 1
+
+        constructor = contstructor_method(comma_vardec, super_args, stmts)
+        return ParseResult(constructor, pos)
+
+    def classdef(self, pos):
+        # 'class'
+        token = self.read_token(pos)
+        if token.value != "class":
+            raise ParseException(f"Expected 'class' at position {pos}")
+        pos += 1
+
+        # classname
+        token = self.read_token(pos)
+        if not isinstance(token, Id_Token):
+            raise ParseException(f"Expected class name at position {pos}")
+        class_name = token.name
+        pos += 1
+
+        # optional 'extends'
+        extends_name = None
+        if self.read_token(pos).value == "extends":
+            pos += 1
+            token = self.read_token(pos)
+            if not isinstance(token, Id_Token):
+                raise ParseException(f"Expected superclass name at position {pos}")
+            extends_name = token.name
+            pos += 1
+
+        # '{'
+        self.assert_token_is(pos, LSBracket_Token())
+        pos += 1
+
+        # parse vardec*
+        vardecs = []
+        while isinstance(self.read_token(pos), (Int_Token, Boolean_Token, Void_Token)):
+            vardec_result = self.vardec_parser(pos)
+            vardecs.append(vardec_result.result)
+            pos = vardec_result.next_pos
+            self.assert_token_is(pos, SemiColon_Token())
+            pos += 1
+
+        # parse constructor (optional)
+        constructors = []
+        if self.read_token(pos).value == "constructor":
+            constructor_result = self.constructor_parser(pos)
+            constructors.append(constructor_result.result)
+            pos = constructor_result.next_pos
+
+        # parse methoddef*
+        methods = []
+        while self.read_token(pos).value == "method":
+            method_result = self.methoddef(pos)
+            methods.append(method_result.result)
+            pos = method_result.next_pos
+
+        # '}'
+        self.assert_token_is(pos, RSBracket_Token())
+        pos += 1
+
+        return ParseResult(Class_Def(class_name, vardecs, constructors + methods, extends_name), pos)
+
+    def program(self, start_pos=0):
+        pos = start_pos
+        stmts = []
+        classes = []
+
+        while pos < len(self.tokens):
+            token = self.read_token(pos)
+
+            # Try to parse a class definition
+            if isinstance(token, class_token):
+                class_result = self.classdef(pos)
+                classes.append(class_result.result)
+                pos = class_result.next_pos
+
+            # Try to parse a statement
+            else:
+                try:
+                    stmt_result = self.stmt(pos)
+                    stmts.append(stmt_result.result)
+                    pos = stmt_result.next_pos
+                except ParseException as e:
+                    raise ParseException(f"Failed to parse at position {pos}: {e}")
+
+        return ParseResult(Program(stmts, classes), pos)
+    
 def makeTree(program):
     #do something that takes in a production
     #and spits out a node, which is then added to the AST
@@ -242,20 +423,20 @@ def makeTree(program):
         
 
     
-    match(someProduction):
-        case(Exp()):
-            match(someProduction):
-                case(add_exp()):
-                    pass
+        match(someProduction):
+            case(Exp()):
+                match(someProduction):
+                    case(add_exp()):
+                        pass
 
-                case(mult_exp()):
-                    pass
+                    case(mult_exp()):
+                        pass
 
-                case(call_exp()):
-                    pass
+                    case(call_exp()):
+                        pass
 
-                case(primary_exp()):
-                    pass
+                    case(primary_exp()):
+                        pass
 
 
         
