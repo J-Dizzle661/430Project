@@ -297,7 +297,7 @@ class Parser():
         pos += 1
 
         # 'super'
-        self.assert_token_is(pos, Super_Token())
+        self.assert_token_is(pos, super_token())
         pos += 1
 
         # '('
