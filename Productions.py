@@ -55,10 +55,13 @@ class block_stmt(Stmt):
 
 
 class Exp:
+    pass
+
+class BinOpExp(Exp):
     def __init__(self, left_exp, op = None, right_exp = None):
 
-        if ((op == None and right_exp != None) or (op != None and right_exp == None)):
-            raise Exception('Not a valid Expression')
+        #if ((op == None and right_exp != None) or (op != None and right_exp == None)):
+         #   raise Exception('Not a valid Expression')
         
         self.left_exp = left_exp
         self.op = op
@@ -81,25 +84,23 @@ class Void(Type_prod):
     def __init__(self):
         super().__init__('Void')
 
-'''
 class primary_exp(Exp):
     def __init__(self, left_exp, op=None, right_exp=None):   ## Not sure if necessary, might delete
         super().__init__(left_exp, op, right_exp)
-'''
         
-class call_exp(Exp):
+class call_exp(BinOpExp):
     def __init__(self, left_exp, right_exp):
         super().__init__(left_exp, DotOp(), right_exp)
 
-class comma_exp(Exp):
-   def __init__(self, left_exp, right_exp):
+class comma_exp(BinOpExp):
+   def __init__(self, left_exp, right_exp): #right could be a list
         super().__init__(left_exp, Comma_Op(), right_exp)
 
-class mult_exp(Exp):
+class mult_exp(BinOpExp):
     def __init__(self, left_exp, op, right_exp): #the op in construct should be a mult_op() or div_op()
         super().__init__(left_exp, op, right_exp)
 
-class add_exp(Exp):
+class add_exp(BinOpExp):
     def __init__(self, left_exp, op, right_exp): #the op in construct should be a plus_op() or minus_op()
         super().__init__(left_exp, op, right_exp)
 
@@ -108,9 +109,10 @@ class add_exp(Exp):
 
 
 class MethodDef:
-    def __init__(self, method_name, comma_vardec, stmts): # comma_vardec object, stmts should be a one or more list
+    def __init__(self, method_name, comma_vardec, type, stmts): # comma_vardec object, stmts should be a one or more list
         self.method_name = method_name
         self.comma_vardec = comma_vardec
+        self.type = type
         self.stmts = stmts
         
 

@@ -234,6 +234,7 @@ class Parser():
             pos = vd.next_pos
         return ParseResult(vardecs, pos)
     
+    '''
 def parse_tokens(tokens): # will be some if-else or pattern match to call each appropriate try_parse function below:
     current_postion =0               # this will keep track of position in token list
 
@@ -252,7 +253,31 @@ def try_parse_class_def(): # just returns a class_def
 def make_program(): # adds all the class_defs and stmts
     pass
 
-def makeNode(someProduction):
+    '''
+def makeTree(program):
     #do something that takes in a production
     #and spits out a node, which is then added to the AST
-    return some_node  
+
+    program.stmts
+    program.class_defs
+    for cls in class_defs:
+        
+
+    
+    match(someProduction):
+        case(Exp()):
+            match(someProduction):
+                case(add_exp()):
+                    pass
+
+                case(mult_exp()):
+                    pass
+
+                case(call_exp()):
+                    pass
+
+                case(primary_exp()):
+                    pass
+
+
+        
