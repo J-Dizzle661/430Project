@@ -11,13 +11,17 @@ class ParseResult:
     result: any
     next_pos: int
 
-
 class Exp(Node):
     pass
 
 @dataclass
 class IdExp(Exp):
     name:str
+
+@dataclass
+class CallExp(Exp):
+    func: IdExp 
+    args: list[Exp]
 
 @dataclass
 class IntLiteral(Exp):
@@ -55,53 +59,100 @@ class Parser():
                 f"Expected token {type(expected_token).__name__} at position {pos}, "
                 f"but found {type(actual_token).__name__}"
         )
-
+    
     def type_parser(tokens, pos):
         if pos >= len(tokens):
             raise ParseException("Expected type but ran out of tokens")
         token = tokens[pos]
         if isinstance(token, Int_token):
-            return ParseResult(Int_Type("Int"), pos + 1)
+            return ParseResult(Type_prod("Int"), pos + 1)
         elif isinstance(token, Boolean_token):
-            return ParseResult(Boolean_Type("Boolean"), pos + 1)
+            return ParseResult(Type_prod("Boolean"), pos + 1)
         elif isinstance(token, Void_token):
-            return ParseResult(Void_Type(), pos + 1)
+            return ParseResult(Type_prod(), pos + 1)
         else:
             raise ParseException(f"Expected type at position {pos}, but got: {token}")
-            
+
+    #comma_exp
+
     def primary_exp(self, start_pos):
         token = self.read_token(start_pos)
+        #var
         if isinstance(token, Id_Token):
-            return ParseResult(IdExp(token.name), start_pos + 1)
+            return ParseResult(IdExp(token.value), start_pos + 1)
+        #int
         elif isinstance(token, Int_token):
             return ParseResult(IntLiteral(token.value), start_pos + 1)
+        #this
+        elif isinstance(token, this_token):
+            return ParseResult(IdExp(token.value), start_pos + 1)
+        #true
+        elif isinstance(token, true_token):
+            return ParseResult(Boolean_Literal(token.value), start_pos + 1)
+        #false
+        elif isinstance(token, false_token):
+            return ParseResult(Boolean_Literal(token.value), start_pos + 1)
+        #println
+        elif isinstance(token, print_token):
+            return ParseResult(IdExp(token.value), start_pos + 1)
+        #new
+        elif isinstance(token, new_token):
+            return ParseResult(IdExp(token.value), start_pos + 1)
         elif isinstance(token, LP_Token):
             e = self.exp(start_pos + 1)
             self.assert_token_is(e.next_pos, RP_Token())
-            return ParseResult(e.result, e.next_pos + 1)
+            return ParseResult(e.result, e.next_pos + 1) 
         else:
             raise ParseException(f"Expected primary expression at position: {start_pos}")
+        
+    #create call_exp
+    #call_exp has to call primary_exp
+    def call_exp(self, start_pos):
+        m = self.primary_exp(start_pos)
+        result = m.result
+        pos = m.next_pos
+        while True:
+            try:
+                t = self.read_token(pos)
+                if isinstance(t, LP_Token):
+                    pos += 1
+                    args = []
+                    if isinstance(self.read_token(pos), RP_Token):
+                        pos +=1
+                        result = CallExp(result, [])
+                        continue
+                    args_parse = self.comma_exp(pos)
+                    args = args_parse.result
+                    pos = args_parse.next_pos
+                    self.assert_token_is(pos, RP_Token())
+                    pos += 1
+                    result = CallExp(result, args)
+                else:
+                    break
+            except ParseException:
+                break
+        return ParseResult(result, pos)
 
     def mult_exp(self, start_pos):
-        m = self.primary_exp(start_pos)
+        m = self.call_exp(start_pos)
         result = m.result
         should_run = True
         pos = m.next_pos
         while should_run:
             try:
-                t= self.read_token_token(pos)
+                t= self.read_token(pos)
                 if isinstance(t, Star_Token):
                     op = MultOp()
                 elif isinstance(t, Div_Token):
                     op = DivOp()
                 else: 
                     raise ParseException("Expected * or /")
-                m2 = self.primary_exp(pos + 1)
+                m2 = self.call_exp(pos + 1)
                 result = BinOpExp(result, op, m2.result)
                 pos = m2.next_pos
             except ParseException:
                 should_run = False
-        return ParseResult(result, pos)
+        return ParseResult(result, pos) #instead of returning parse result it should just call make_node function instead (that will build the tree)
 
     def add_exp(self, start_pos):
         m = self.mult_exp(start_pos)
@@ -121,7 +172,7 @@ class Parser():
                 pos = m2.next_pos
             except ParseException:
                 break
-        return ParseResult(result, pos)
+        return ParseResult(result, pos) 
     
     def exp(self, start_pos):
         return self.add_exp(start_pos)
