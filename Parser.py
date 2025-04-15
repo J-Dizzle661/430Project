@@ -136,7 +136,6 @@ class Parser():
         var = Variable(id_token.name)
         return ParseResult(vardec_stmt(type_result.result, var), type_result.next_pos + 1)
 
-
     def stmt(self, start_pos):
         t = self.read_token(start_pos)
 
@@ -208,7 +207,7 @@ class Parser():
                 stmts.append(s.result)
                 pos = s.next_pos
             return ParseResult(block_stmt(stmts), pos + 1)
-        
+
         # expression stmt
         try:
             e = self.exp(start_pos)
@@ -219,7 +218,6 @@ class Parser():
 
     def comma_vardec_parser(self, pos):
         vardecs = []
-        # First vardec
         vd = self.vardec_parser(pos)
         vardecs.append(vd.result)
         pos = vd.next_pos
@@ -227,33 +225,13 @@ class Parser():
         while pos < len(self.tokens):
             token = self.read_token(pos)
             if not isinstance(token, Comma_Token):
-                break  # End of comma list
-            pos += 1  # skip comma
+                break
+            pos += 1
             vd = self.vardec_parser(pos)
             vardecs.append(vd.result)
             pos = vd.next_pos
+
         return ParseResult(vardecs, pos)
-    
-    '''
-def parse_tokens(tokens): # will be some if-else or pattern match to call each appropriate try_parse function below:
-    current_postion =0               # this will keep track of position in token list
-
-def try_parse_Exp(): # can return a call exp, comma exp, mult exp, add exp
-    try_parse_add_exp()            # or int literal, bool literal, or void  
-
-def try_parse_Stmt():# can return any kind of stmt
-    pass
-
-def try_parse_Method(): # can return either a method_def or an an constructor_method
-    pass
-
-def try_parse_class_def(): # just returns a class_def
-    pass
-
-def make_program(): # adds all the class_defs and stmts
-    pass
-
-    '''
 def makeTree(program):
     #do something that takes in a production
     #and spits out a node, which is then added to the AST

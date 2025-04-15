@@ -3,9 +3,7 @@ from Token import Token
 class Node:
     def __init__(self, value):
         self.value = value
-'''
         
-
 class Node:
     def __init__(self, production):
         self.value = production
