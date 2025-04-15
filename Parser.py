@@ -6,8 +6,8 @@ from AST import Node
 from Productions import *
 from dataclasses import dataclass
 
-@dataclass
-class ParseResult:
+
+class ParseResult(Node):
     result: any
     next_pos: int
 

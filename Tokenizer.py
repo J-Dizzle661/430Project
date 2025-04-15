@@ -121,9 +121,15 @@ class Tokenizer(Token):
             if token is None:
                 raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.position - 1]}' at position {self.position - 1}")
             else:
-                list_tokens.append(str(token))
-        return list_tokens
-    
-      ## Might impliment this later to make testing easier and faster -Jason ##
+                list_tokens.append(token)
+        self.tokens = list_tokens
+
+    def get_tokens_as_str(self):
+        tokens_str = []
+
+        for token in self.list_tokens:
+            tokens_str.append(str(token))
+
+        return tokens_str
     
         
