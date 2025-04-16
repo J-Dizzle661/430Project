@@ -65,11 +65,11 @@ class Parser():
         if pos >= len(tokens):
             raise ParseException("Expected type but ran out of tokens")
         token = tokens[pos]
-        if isinstance(token, Int_token):
+        if isinstance(token, Int_Type):
             return ParseResult(Int_Type(), pos + 1)
-        elif isinstance(token, Boolean_token):
+        elif isinstance(token, Boolean_Type):
             return ParseResult(Boolean_Type(), pos + 1)
-        elif isinstance(token, Void_token):
+        elif isinstance(token, Void_Type):
             return ParseResult(Void_Type(), pos + 1)
         else:
             raise ParseException(f"Expected type at position {pos}, but got: {token}")
@@ -355,7 +355,7 @@ class Parser():
         pos += 1
 
         # 'super'
-        self.assert_token_is(pos, Super_Token())
+        self.assert_token_is(pos, super_token())
         pos += 1
 
         # '('
@@ -386,7 +386,7 @@ class Parser():
         self.assert_token_is(pos, RSBracket_Token())
         pos += 1
 
-        constructor = contstructor_method(comma_vardec, super_args, stmts)
+        constructor = constructor_method(comma_vardec, super_args, stmts)
         return ParseResult(constructor, pos)
 
     def classdef(self, pos):
@@ -419,7 +419,7 @@ class Parser():
 
         # parse vardec*
         vardecs = []
-        while isinstance(self.read_token(pos), (Int_Token, Boolean_Token, Void_Token)):
+        while isinstance(self.read_token(pos), (Int_Type, Boolean_Type, Void_Type)):
             vardec_result = self.vardec_parser(pos)
             vardecs.append(vardec_result.result)
             pos = vardec_result.next_pos
@@ -429,7 +429,7 @@ class Parser():
         # parse constructor (optional)
         constructors = []
         if self.read_token(pos).value == "constructor":
-            constructor_result = self.constructor_parser(pos)
+            constructor_result = self.constructor(pos)
             constructors.append(constructor_result.result)
             pos = constructor_result.next_pos
 

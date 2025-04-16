@@ -122,7 +122,7 @@ class MethodDef:
         self.stmts = stmts
         
 
-class contstructor_method(MethodDef):
+class constructor_method(MethodDef):
     def __init__(self, comma_vardec, comma_exp, stmts):
         super().__init__('init', comma_vardec, stmts)
         self.comma_exp = comma_exp
