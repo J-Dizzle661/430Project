@@ -2,6 +2,10 @@ import ReserveWords
 from Tokenizer import Id_Token
 from AST import Node
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+from Parser import *
+>>>>>>> Stashed changes
 =======
 from Parser import *
 >>>>>>> Stashed changes
@@ -33,4 +37,7 @@ print(program)
 makeTree(program)
 
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

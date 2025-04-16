@@ -500,11 +500,16 @@ def makeTree(program):
             cls.addchild(Node(method))
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     case(primary_exp()):
                         pass
 
 
         
+=======
+    tree.print_tree()
+       
+>>>>>>> Stashed changes
 =======
     tree.print_tree()
        
