@@ -46,11 +46,11 @@ class Parser():
         self.tokens = tokens
         self.position = 0
     
-    def read_token(self, x):
-        if (self.position < 0 or self.position >= len(self.tokens)):
-            raise Exception(f"Ran out of tokens")
-        else:
-          return self.tokens[self.position]
+    def read_token(self, pos):
+        if pos < 0 or pos >= len(self.tokens):
+            raise Exception(f"Ran out of tokens at position {pos}")
+        return self.tokens[pos]
+
         
     def assert_token_is(self, pos, expected_token):
         actual_token = self.read_token(pos)
@@ -65,22 +65,30 @@ class Parser():
         if pos >= len(tokens):
             raise ParseException("Expected type but ran out of tokens")
         token = tokens[pos]
-        if isinstance(token, Int_Type):
+        if isinstance(token, Int_token):
             return ParseResult(Int_Type(), pos + 1)
-        elif isinstance(token, Boolean_Type):
+        elif isinstance(token, Boolean_token):
             return ParseResult(Boolean_Type(), pos + 1)
-        elif isinstance(token, Void_Type):
+        elif isinstance(token, Void_token):
             return ParseResult(Void_Type(), pos + 1)
         else:
             raise ParseException(f"Expected type at position {pos}, but got: {token}")
 
     #comma_exp
     def comma_exp(self, start_pos):
-        e = self.exp(start_pos+1)
-        while self.assert_token_is(e.next_pos, Comma_Token()):
-            e.next_pos += 1
-            e2 = self.exp(e.next_pos)
-            return ParseResult(comma_exp(e.result, e2.result), e2.next_pos)
+        args = []
+        first = self.exp(start_pos)
+        args.append(first.result)
+        pos = first.next_pos
+        while pos < len(self.tokens):
+            token = self.read_token(pos)
+            if not isinstance(token, Comma_Token):
+                break
+            pos += 1
+            next_arg = self.exp(pos)
+            args.append(next_arg.result)
+            pos = next_arg.next_pos
+        return ParseResult(args, pos)
 
     def primary_exp(self, start_pos):
         token = self.read_token(start_pos)
@@ -481,7 +489,7 @@ def traverse_exp(exp):
 def traverse_stmt():
     pass
 
- 
+'''
 def makeTree(program):
     #do something that takes in a production
     #and spits out a node, which is then added to the AST
@@ -509,5 +517,4 @@ def makeTree(program):
 
 
     tree.print_tree()
-    
-
+'''
