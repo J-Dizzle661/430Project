@@ -481,7 +481,7 @@ def traverse_exp(exp):
 def traverse_stmt():
     pass
 
-    
+'''  
 def makeTree(program):
     #do something that takes in a production
     #and spits out a node, which is then added to the AST
@@ -498,19 +498,16 @@ def makeTree(program):
 
         for method in cls.methods:
             cls.addchild(Node(method))
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                    case(primary_exp()):
-                        pass
+            case(primary_exp()):
+            pass
 
 
         
-=======
+
     tree.print_tree()
        
->>>>>>> Stashed changes
-=======
+
+
     tree.print_tree()
-       
->>>>>>> Stashed changes
+  '''     
+
