@@ -46,7 +46,7 @@ class Parser():
         self.tokens = tokens
         self.position = 0
     
-    def read_token(self):
+    def read_token(self, x):
         if (self.position < 0 or self.position >= len(self.tokens)):
             raise Exception(f"Ran out of tokens")
         else:
@@ -60,16 +60,17 @@ class Parser():
                 f"but found {type(actual_token).__name__}"
         )
     
-    def type_parser(tokens, pos):
+    def type_parser(self, pos):
+        tokens = self.tokens
         if pos >= len(tokens):
             raise ParseException("Expected type but ran out of tokens")
         token = tokens[pos]
         if isinstance(token, Int_token):
-            return ParseResult(Type_prod("Int"), pos + 1)
+            return ParseResult(Int_Type(), pos + 1)
         elif isinstance(token, Boolean_token):
-            return ParseResult(Type_prod("Boolean"), pos + 1)
+            return ParseResult(Boolean_Type(), pos + 1)
         elif isinstance(token, Void_token):
-            return ParseResult(Type_prod(), pos + 1)
+            return ParseResult(Void_Type(), pos + 1)
         else:
             raise ParseException(f"Expected type at position {pos}, but got: {token}")
 
@@ -94,10 +95,10 @@ class Parser():
             return ParseResult(IdExp(token.value), start_pos + 1)
         #true
         elif isinstance(token, true_token):
-            return ParseResult(Boolean_Literal(token.value), start_pos + 1)
+            return ParseResult(BooleanLiteral(token.value), start_pos + 1)
         #false
         elif isinstance(token, false_token):
-            return ParseResult(Boolean_Literal(token.value), start_pos + 1)
+            return ParseResult(BooleanLiteral(token.value), start_pos + 1)
         #println
         elif isinstance(token, print_token):
             return ParseResult(IdExp(token.value), start_pos + 1)
@@ -234,7 +235,7 @@ class Parser():
         if isinstance(t, return_token):
             next_token = self.read_token(start_pos + 1)
             if isinstance(next_token, SemiColon_Token):
-                return ParseResult(return_stmt(None), start_pos + 2)
+                return ParseResult(return_stmt(Exp()), start_pos + 2)
             else:
                 e = self.exp(start_pos + 1)
                 self.assert_token_is(e.next_pos, SemiColon_Token())
@@ -468,32 +469,43 @@ class Parser():
                 except ParseException as e:
                     raise ParseException(f"Failed to parse at position {pos}: {e}")
 
-        return ParseResult(Program(stmts, classes), pos)
+        return ParseResult(Program(classes, stmts), pos)
+    
+def traverse_exp(exp):
+    match(exp):
+        case BinOpExp():
+            return Node(exp)
+        case Int_Type():
+            return Node
+    
+def traverse_stmt():
+    pass
+
     
 def makeTree(program):
     #do something that takes in a production
     #and spits out a node, which is then added to the AST
+    tree = Node(program) 
 
-    program.stmts
-    program.class_defs
-    for cls in class_defs:
-        
+    for stmt in program.stmts:
+        tree.add_child(Node(stmt))
 
-    
-        match(someProduction):
-            case(Exp()):
-                match(someProduction):
-                    case(add_exp()):
-                        pass
+    for cls in program.classes:
+        tree.add_child(Node(cls))
 
-                    case(mult_exp()):
-                        pass
+        for vardec in cls.vardecs:
+            cls.add_child(Node(vardec))
 
-                    case(call_exp()):
-                        pass
+        for method in cls.methods:
+            cls.addchild(Node(method))
 
+<<<<<<< Updated upstream
                     case(primary_exp()):
                         pass
 
 
         
+=======
+    tree.print_tree()
+       
+>>>>>>> Stashed changes

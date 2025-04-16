@@ -4,7 +4,6 @@ class Production:
     def __init__(self):
         pass
 
-
 class Stmt:
     def __init__(self):
         pass
@@ -52,6 +51,13 @@ class block_stmt(Stmt):
     def __init__(self, stmts): #list of stmts
         self.stmts = stmts
 
+class exp_stmt(Stmt):
+    def __init__(self, exp):
+        self.exp = exp
+
+    def __str__(self):
+        print("Exp stmt ", self.exp)
+
 
 
 class Exp:
@@ -70,19 +76,19 @@ class BinOpExp(Exp):
 
 class Type_prod(Exp):
     def __init__(self, value):
-        super().__init__(value)
+        self.value = value
 
-class Int_Literal(Type_prod):
-    def __init__(self, value):
-        super().__init__(value)
-
-class Boolean_Literal(Type_prod):
-    def __init__(self, value):
-        super().__init__(value)
-
-class Void(Type_prod):
+class Int_Type(Type_prod):
     def __init__(self):
-        super().__init__('Void')
+        super().__init__('Int')
+
+class Boolean_Type(Type_prod):
+    def __init__(self):
+        super().__init__('Boolean')
+
+class Void_Type(Type_prod):
+    def __init__(self):
+        super().__init__('void')
 
 class primary_exp(Exp):
     def __init__(self, left_exp, op=None, right_exp=None):   ## Not sure if necessary, might delete
@@ -137,7 +143,7 @@ class Class_Def:
         self.extends_name = extends_name
 
 class Program:
-    def __init__(self, stmts, classes): #stmts  and class_defs should probably be lists
+    def __init__(self, classes, stmts = None): #stmts  and class_defs should probably be lists
         self.stmts = stmts
         self.classes = classes
 
