@@ -4,6 +4,9 @@ class Production:
     def __init__(self):
         pass
 
+def __str__(self):
+    return f"BinOpExp({self.left_exp}, {self.op.op_type}, {self.right_exp})"
+
 class Stmt:
     def __init__(self):
         pass
@@ -15,7 +18,7 @@ class vardec_stmt(Stmt):
 
 class comma_vardec_stmt(Stmt):  #vardecs should be a list 
     def __init__(self, vardecs):
-        self.vardecs
+        self.vardecs = vardecs
     
 
 class assign_stmt(Stmt):
@@ -71,7 +74,7 @@ class BinOpExp(Exp):
         
         self.left_exp = left_exp
         self.op = op
-        self.left_exp - right_exp
+        self.right_exp = right_exp
 
 
 class Type_prod(Exp):
@@ -124,7 +127,7 @@ class MethodDef:
 
 class constructor_method(MethodDef):
     def __init__(self, comma_vardec, comma_exp, stmts):
-        super().__init__('init', comma_vardec, stmts)
+        super().__init__('init', comma_vardec, Void_Type(), stmts)
         self.comma_exp = comma_exp
 
 
