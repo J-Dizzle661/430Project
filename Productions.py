@@ -4,6 +4,8 @@ class Production:
     def __init__(self):
         pass
 
+def __str__(self):
+    return f"BinOpExp({self.left_exp}, {self.op.op_type}, {self.right_exp})"
 
 class Stmt:
     def __init__(self):
@@ -16,7 +18,7 @@ class vardec_stmt(Stmt):
 
 class comma_vardec_stmt(Stmt):  #vardecs should be a list 
     def __init__(self, vardecs):
-        self.vardecs
+        self.vardecs = vardecs
     
 
 class assign_stmt(Stmt):
@@ -52,6 +54,13 @@ class block_stmt(Stmt):
     def __init__(self, stmts): #list of stmts
         self.stmts = stmts
 
+class exp_stmt(Stmt):
+    def __init__(self, exp):
+        self.exp = exp
+
+    def __str__(self):
+        print("Exp stmt ", self.exp)
+
 
 
 class Exp:
@@ -65,24 +74,24 @@ class BinOpExp(Exp):
         
         self.left_exp = left_exp
         self.op = op
-        self.left_exp - right_exp
+        self.right_exp = right_exp
 
 
 class Type_prod(Exp):
     def __init__(self, value):
-        super().__init__(value)
+        self.value = value
 
-class Int_Literal(Type_prod):
-    def __init__(self, value):
-        super().__init__(value)
-
-class Boolean_Literal(Type_prod):
-    def __init__(self, value):
-        super().__init__(value)
-
-class Void(Type_prod):
+class Int_Type(Type_prod):
     def __init__(self):
-        super().__init__('Void')
+        super().__init__('Int')
+
+class Boolean_Type(Type_prod):
+    def __init__(self):
+        super().__init__('Boolean')
+
+class Void_Type(Type_prod):
+    def __init__(self):
+        super().__init__('void')
 
 class primary_exp(Exp):
     def __init__(self, left_exp, op=None, right_exp=None):   ## Not sure if necessary, might delete
@@ -116,9 +125,9 @@ class MethodDef:
         self.stmts = stmts
         
 
-class contstructor_method(MethodDef):
+class constructor_method(MethodDef):
     def __init__(self, comma_vardec, comma_exp, stmts):
-        super().__init__('init', comma_vardec, stmts)
+        super().__init__('init', comma_vardec, Void_Type(), stmts)
         self.comma_exp = comma_exp
 
 
@@ -137,7 +146,7 @@ class Class_Def:
         self.extends_name = extends_name
 
 class Program:
-    def __init__(self, stmts, classes): #stmts  and class_defs should probably be lists
+    def __init__(self, classes, stmts = None): #stmts  and class_defs should probably be lists
         self.stmts = stmts
         self.classes = classes
 

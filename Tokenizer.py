@@ -8,7 +8,7 @@ class Id_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
-class Number_Token(Token) :
+class IntLiteral_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
@@ -21,8 +21,8 @@ class Tokenizer(Token):
             ")": symb.RP_Token,
             "[": symb.LBracket_Token,
             "]": symb.RBracket_Token,
-            "{": symb.RSBracket_Token,
-            "}": symb.LSBracket_Token,
+            "}": symb.RSBracket_Token,
+            "{": symb.LSBracket_Token,
             ";": symb.SemiColon_Token,
             ",": symb.Comma_Token,
             ":": symb.Colon_Token,
@@ -54,53 +54,42 @@ class Tokenizer(Token):
 
         if not digits:
             return None
-        return Number_Token(int(digits))
+        return IntLiteral_Token(int(digits))
     
-    def try_read_ID_Or_Reserve_Token(self) :
-        if self.position < len(self.input) and self.input[self.position].isalpha() :
-            chars = "" + self.input[self.position]
+    def try_read_ID_Or_Reserve_Token(self):
+        if self.position < len(self.input) and self.input[self.position].isalpha():
+            chars = self.input[self.position]
             self.position += 1
-            while self.position < len(self.input) and self.input[self.position].isalnum() :
+            while self.position < len(self.input) and self.input[self.position].isalnum():
                 chars += self.input[self.position]
                 self.position += 1
-            if chars == "println" :
-                return res.print_token()
-            elif chars == 'this' :
-                return res.this_token()
-            elif chars == 'true' :
-                return res.true_token()
-            elif chars == 'false' :
-                return res.false_token()
-            elif chars == 'new' :
-                return res.new_token()
-            elif chars == 'while' :
-                return res.while_token()
-            elif chars == 'break' :
-                return res.break_token()
-            elif chars == 'return' :
-                return res.return_token()
-            elif chars == 'if' :
-                return res.if_token()
-            elif chars == 'else' :
-                return res.else_token()
-            elif chars == 'method' :
-                return res.method_token()
-            elif chars == 'init' :
-                return res.init_token()
-            elif chars == 'super' :
-                return res.super_token()
-            elif chars == 'class' :
-                return res.this_token()
-            elif chars == 'Int' :
-                return res.Int_token()
-            elif chars == 'Boolean' :
-                return res.Boolean_token()
-            elif chars == 'Void' :
-                return res.Void_token()            
-            else :
+
+            reserved_map = {
+                "println": res.print_token,
+                "this": res.this_token,
+                "true": res.true_token,
+                "false": res.false_token,
+                "new": res.new_token,
+                "while": res.while_token,
+                "break": res.break_token,
+                "return": res.return_token,
+                "if": res.if_token,
+                "else": res.else_token,
+                "method": res.method_token,
+                "init": res.init_token,
+                "super": res.super_token,
+                "class": res.class_token,
+                "Int": res.Int_token,
+                "Boolean": res.Boolean_token,
+                "Void": res.Void_token,
+            }
+
+            if chars in reserved_map:
+                return reserved_map[chars]()
+            else:
                 return Id_Token(chars)
-        else :
-            return None
+        return None
+
         
     def try_read_symbol(self):
         for symbol in sorted(self.symbol_map.keys(), key=len, reverse=True): 
@@ -111,25 +100,27 @@ class Tokenizer(Token):
 
     def read_Tokens(self) :
         list_tokens = []
-        while (self.get_position() < len(self.input)):
+        while True:
             self.skip_whitespace()
-            token = self.try_read_number_token()
+            if self.position >= len(self.input):
+                break
+            token = self.try_read_int_token()
             if token is None:
                 token = self.try_read_symbol()
             if token is None:
                 token = self.try_read_ID_Or_Reserve_Token()
             if token is None:
-                raise Exception(f"Invalid Token. Expected: (, ), /, *, etc... Got: '{self.input[self.position - 1]}' at position {self.position - 1}")
+                current_char = self.input[self.position] if self.position < len(self.input) else "<EOF>"
+                context = self.input[self.position:self.position + 10] if self.position < len(self.input) else "<EOF>"
+                raise Exception(
+                    f"\nInvalid Token!\n"
+                    f"Char: '{current_char}' at position {self.position}\n"
+                    f"Context: '{context}'\n"
+                )
             else:
-                list_tokens.append(token)
-        self.tokens = list_tokens
-
-    def get_tokens_as_str(self):
-        tokens_str = []
-
-        for token in self.tokens:
-            tokens_str.append(str(token))
-
-        return tokens_str
+                list_tokens.append((token))
+        return list_tokens
+    
+      ## Might impliment this later to make testing easier and faster -Jason ##
     
         

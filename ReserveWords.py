@@ -1,4 +1,4 @@
-from Tokenizer import Token
+from Token import Token
 
 class ReserveWord(Token):
     def __init__(self, value):
