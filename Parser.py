@@ -564,7 +564,7 @@ class Parser():
             raise ParseException(f"Expected '}}' at position {pos}")
         pos += 1
 
-        return ParseResult(Class_Def(class_name, vardecs, constructors + methods, extends_name), pos)
+        return ParseResult(Class_Def(class_name, vardecs, constructors, methods, extends_name), pos)
 
     def program(self, start_pos=0):
         pos = start_pos

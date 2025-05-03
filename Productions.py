@@ -102,9 +102,9 @@ class call_exp(BinOpExp):
     def __init__(self, left_exp, right_exp):
         super().__init__(left_exp, DotOp(), right_exp)
 
-class comma_exp(BinOpExp):
-   def __init__(self, left_exp, right_exp): #right could be a list
-        super().__init__(left_exp, Comma_Op(), right_exp)
+class comma_exp():
+   def __init__(self, exps): #right could be a list
+        self.exps = exps
 
 class mult_exp(BinOpExp):
     def __init__(self, left_exp, op, right_exp): #the op in construct should be a mult_op() or div_op()
@@ -140,9 +140,10 @@ class Variable:
 
 
 class Class_Def:
-    def __init__(self, class_name, vardecs, methods, extends_name = None):
+    def __init__(self, class_name, vardecs, constructors,  methods, extends_name = None):
         self.class_name = class_name
         self.vardecs = vardecs
+        self.constructors = constructors
         self.methods = methods
         self.extends_name = extends_name
 

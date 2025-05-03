@@ -109,7 +109,7 @@ class Tokenizer(Token):
             self.skip_whitespace()
             if self.position >= len(self.input):
                 break
-            token = self.try_read_int_token()
+            token = self.try_read_number_token()
             if token is None:
                 token = self.try_read_symbol()
             if token is None:
