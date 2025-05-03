@@ -32,7 +32,11 @@ class Tokenizer(Token):
             "=": symb.Equals_Token,
             "+": symb.Plus_Token,
             "-": symb.Minus_Token,
-            '.': symb.Dot_Token
+            '.': symb.Dot_Token,
+            '<': symb.Less_Than_Token,
+            '>': symb.Greater_Than_Token,
+            '&&': symb.Add_Token,
+            '||': symb.Or_Token,
         }
 
     def get_position(self) :
@@ -82,6 +86,7 @@ class Tokenizer(Token):
                 "Int": res.Int_token,
                 "Boolean": res.Boolean_token,
                 "Void": res.Void_token,
+                "extends": res.extends_token,
             }
 
             if chars in reserved_map:

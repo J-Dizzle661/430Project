@@ -71,3 +71,7 @@ class Boolean_token(ReserveWord):
 class Void_token(ReserveWord):
     def __init__(self):
         super().__init__('Void')
+
+class extends_token(ReserveWord):
+    def __init__(self):
+        super().__init__('extends')
