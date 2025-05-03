@@ -2,4 +2,6 @@ class Animal{
     x;
     bool;
     y;
-    constructor () {);}}
+    constructor () {);
+}
+}

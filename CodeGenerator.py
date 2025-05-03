@@ -49,10 +49,10 @@ class CodeGenerator:
                     for stmt in constructor.stmts:
                         file.write(tab_before(print_stmt(stmt)))
 
-                    file.write('}')
+                    file.write('\n}')
                     
                     #continue with method def
 
 
-                    file.write('}')
+                    file.write('\n}')
 
