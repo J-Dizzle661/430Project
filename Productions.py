@@ -42,9 +42,10 @@ class return_stmt(Stmt):
         
 
 class if_stmt(Stmt):
-    def __init__(self, guard, stmts): # stmts is a list 
-        self.guard = guard #this is the condition
-        self.stmts = stmts
+    def __init__(self, guard, then_stmt, else_stmt=None):
+        self.guard = guard  # this is the condition
+        self.then_stmt = then_stmt
+        self.else_stmt = else_stmt
 
 class else_stmt(Stmt):
     def __init__(self, stmts):
