@@ -1,1 +1,5 @@
-class Animal{    constructor () {);}}
+class Animal{
+    x;
+    bool;
+    y;
+    constructor () {);}}

@@ -7,6 +7,9 @@ from CodeGenerator import *
 
 test_input ='''
             class Animal{
+                Int x;
+                Boolean bool;
+                Int y;
                 init(){super();}
             }
             '''

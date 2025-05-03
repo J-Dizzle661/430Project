@@ -25,10 +25,10 @@ class CodeGenerator:
         with open('JS_Code.txt', 'w') as file:
             for class_ in self.classes:
                 file.write(with_space('class'))
-                file.write(class_.class_name + '{')
+                file.write(class_.class_name + '{\n')
 
                 for vardec in class_.vardecs:
-                    file.write(tab_before(vardec.variable + ';'))
+                    file.write(tab_before(vardec.variable.var_name) + ';\n')
 
                 for constructor in class_.constructors:
                     file.write(tab_before('constructor ('))
