@@ -1,7 +1,6 @@
 import unittest
 from Tokenizer import Tokenizer
-from Parser import Parser, makeTree
-from Productions import assign_stmt, vardec_stmt, while_stmt, if_stmt, return_stmt
+from Parser import Parser
 from CodeGenerator import *
 
 
