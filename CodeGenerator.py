@@ -2,15 +2,11 @@ def with_space(text):
     return text +  ' '
 
 def tab_before_with_space(text, num_tabs = 1):
-    current_tabs = ''
+    return with_space(tab_before(text, num_tabs))
 
-    for tabs in num_tabs:
-        current_tabs += tabs
-    
-    return current_tabs + with_space(text)
-
-def tab_before(text):
-    return '    ' + text
+def tab_before(text, num_tabs = 1):
+    current_tabs = '    ' * num_tabs
+    return current_tabs + text
 
 def print_stmt(stmt):
     pass   
@@ -25,31 +21,52 @@ class CodeGenerator:
         with open('JS_Code.txt', 'w') as file:
             for class_ in self.classes:
                 file.write(with_space('class'))
-                file.write(class_.class_name + '{\n')
+                file.write(with_space(class_.class_name))
+                if class_.extends_name:
+                    file.write(with_space('extends ' + class_.extends_name ))
+                file.write('{\n')
+                num_tabs = 1
 
                 for vardec in class_.vardecs:
-                    file.write(tab_before(vardec.variable.var_name) + ';\n')
+                    file.write(tab_before(vardec.variable.var_name + ';\n', num_tabs))
 
                 for constructor in class_.constructors:
-                    file.write(tab_before('constructor ('))
+                    file.write(tab_before('constructor('))
 
-                    for comma_vardec in constructor.comma_vardec:
-                        file.write(with_space(comma_vardec + ','))
-                    file.write(') {')
+                    if constructor.comma_vardec: # checks if vardecs list is not empty
+                        list_comma_vardec = constructor.comma_vardec.vardecs
+                        if len(list_comma_vardec) > 1:
+                            for i in range(len(list_comma_vardec) - 1):
+                                comma_vardec = list_comma_vardec[i]
+                                file.write(with_space(comma_vardec.variable.var_name + ','))
+                            file.write(list_comma_vardec[len(list_comma_vardec) - 1].variable.var_name)
+                        elif list_comma_vardec:
+                            file.write(list_comma_vardec[0].variable.var_name)
+                            
+                    file.write(') {\n')
+                    num_tabs+=1
 
-                    if len(constructor.comma_exp) > 0:
-                        file.write('super(')
+                    list_comma_exp = constructor.comma_exp
+                    if list_comma_exp != None:
+                        file.write(tab_before('super(', num_tabs))
                         
-                        for comma_exp in constructor.comma_exp:
-                            file.write(with_space(comma_exp + ','))
+                        if list_comma_exp: #checks if comma list is not empty
+                            if len(list_comma_exp) > 1:
+                                for i in range(len(list_comma_exp) - 1):
+                                    comma_exp = list_comma_vardec[i]
+                                    file.write(with_space(comma_exp.variable.var_name + ','))
+                                file.write(list_comma_exp[len(list_comma_exp) - 1].name)
+                            elif list_comma_exp:
+                                file.write(list_comma_exp[0].name)
                     
                     file.write(');')
                     
 
                     for stmt in constructor.stmts:
-                        file.write(tab_before(print_stmt(stmt)))
+                        file.write(tab_before(print_stmt(stmt), num_tabs))
 
-                    file.write('\n}')
+                    num_tabs -= 1
+                    file.write('\n' + tab_before('}', num_tabs))
                     
                     #continue with method def
 

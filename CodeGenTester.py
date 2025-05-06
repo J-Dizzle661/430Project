@@ -5,11 +5,11 @@ from CodeGenerator import *
 
 
 test_input ='''
-            class Animal{
-                Int x;
-                Boolean bool;
-                Int y;
-                init(){super();}
+            class Dog extends Animal{
+                Int age;
+                Boolean isAlive;
+                Int price;
+                init(int age, Boolean isAlive, Int price){super(age, isAlive, price);}
             }
             '''
 

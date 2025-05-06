@@ -396,7 +396,7 @@ class Parser():
             vardecs.append(vd.result)
             pos = vd.next_pos
 
-        return ParseResult(vardecs, pos)
+        return ParseResult(comma_vardec_stmt(vardecs), pos)
     
     def methoddef(self, start_pos):
         pos = start_pos
