@@ -9,7 +9,22 @@ test_input ='''
                 Int age;
                 Boolean isAlive;
                 Int price;
-                init(int age, Boolean isAlive, Int price){super(age, isAlive, price);}
+
+                init(Int age, Boolean isAlive, Int price){
+                    super(age, isAlive, price);
+                }
+
+                method bark(Int age, Boolean isAlive) Void{
+                    5 * 5;
+                    2 * 7;
+                    7 + 9;
+                    false;
+                    true;
+                    10;
+                    Int x;
+                    Bool y = false;
+                    Int z = 6 + 6;
+                }
             }
             '''
 

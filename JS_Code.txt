@@ -5,4 +5,16 @@ class Dog extends Animal {
     constructor(age, isAlive, price) {
         super(age, isAlive, price);
     }
+    bark(age, isAlive) {
+        5 * 5;
+        2 * 7;
+        7 + 9;
+        false;
+        true;
+        10;
+        let x;
+        let y = false;
+        let z = 6 + 6;
+    }
+
 }

@@ -188,7 +188,7 @@ class Parser():
                 else: 
                     raise ParseException("Expected * or /")
                 m2 = self.call_exp(pos + 1)
-                result = BinOpExp(result, op, m2.result)
+                result = mult_exp(result, op, m2.result)
                 pos = m2.next_pos
             except ParseException:
                 should_run = False
@@ -208,7 +208,7 @@ class Parser():
                 else: 
                     raise ParseException("Expected + or -")
                 m2 = self.mult_exp(pos+1)
-                result = BinOpExp(result, op, m2.result)
+                result = add_exp(result, op, m2.result)
                 pos = m2.next_pos
             except ParseException:
                 break

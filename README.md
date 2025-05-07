@@ -61,20 +61,20 @@ stmt ::= exp `;` | Expression statements
          `if` `(` exp `)` stmt [`else` stmt] | 
          `{` stmt* `}` Block
 
-comma_vardec ::= [vardec (`,` vardec)*]
+<!-- comma_vardec ::= [vardec (`,` vardec)*] -->
 
-methoddef ::= `method` methodname `(` comma_vardec `)` type
-              `{` stmt* `}`
+<!-- methoddef ::= `method` methodname `(` comma_vardec `)` type
+              `{` stmt* `}` -->
 
-constructor ::= `init` `(` comma_vardec `)` `{`
+<!-- constructor ::= `init` `(` comma_vardec `)` `{`
                 [`super` `(` comma_exp `)` `;` ]
                 stmt*
-                `}`
-classdef ::= `class` classname [`extends` classname] `{`
+                `}` -->
+<!-- classdef ::= `class` classname [`extends` classname] `{`
              (vardec `;`)*
              constructor
              methoddef*
-             `}`
+             `}` -->
 
 program ::= classdef* stmt+  stmt+ is the entry point
 

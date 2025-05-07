@@ -1,3 +1,7 @@
+from Productions import*
+from ReserveWords import*
+from Expressions import*
+
 def with_space(text):
     return text +  ' '
 
@@ -8,8 +12,58 @@ def tab_before(text, num_tabs = 1):
     current_tabs = '    ' * num_tabs
     return current_tabs + text
 
-def print_stmt(stmt):
-    pass   
+def comma_vardec(list_comma_vardec): # returns comma vardec as a string in JS format
+    vardec = ''
+
+    if len(list_comma_vardec) > 1:
+        for i in range(len(list_comma_vardec) - 1):
+            comma_vardec = list_comma_vardec[i]
+            vardec += with_space(comma_vardec.variable.var_name + ',')
+        vardec += list_comma_vardec[len(list_comma_vardec) - 1].variable.var_name
+    elif list_comma_vardec:
+        vardec += list_comma_vardec[0].variable.var_name
+
+    return vardec
+
+def get_primary_exp(primary):
+     match primary:
+        case IntLiteral():
+            return str(primary.value)
+        case BooleanLiteral():
+            return str(primary.value)
+
+def op_exp_op(current_exp):
+    return get_primary_exp(current_exp.left_exp) + ' ' +  current_exp.op.op_type + ' ' + get_primary_exp(current_exp.right_exp)
+
+
+
+def get_exp(exp):
+    current_exp = exp.exp
+
+    match current_exp :
+        case add_exp():
+            return op_exp_op(current_exp)
+        case mult_exp():
+            return op_exp_op(current_exp)
+        case call_exp():
+            return op_exp_op(current_exp)
+        case IntLiteral():
+            return str(current_exp.value)
+        case BooleanLiteral():
+            return str(current_exp.value)
+
+
+def get_stmt(stmt):
+    match stmt:
+        case exp_stmt():
+            return get_exp(stmt)
+        case vardec_stmt():
+            return 'let ' + stmt.variable.var_name
+        case assign_stmt():
+            return 'let ' + stmt.variable.var_name + ' = ' + get_exp(stmt)
+        
+        
+
 
 class CodeGenerator:
     def __init__(self, program):
@@ -35,14 +89,8 @@ class CodeGenerator:
 
                     if constructor.comma_vardec: # checks if vardecs list is not empty
                         list_comma_vardec = constructor.comma_vardec.vardecs
-                        if len(list_comma_vardec) > 1:
-                            for i in range(len(list_comma_vardec) - 1):
-                                comma_vardec = list_comma_vardec[i]
-                                file.write(with_space(comma_vardec.variable.var_name + ','))
-                            file.write(list_comma_vardec[len(list_comma_vardec) - 1].variable.var_name)
-                        elif list_comma_vardec:
-                            file.write(list_comma_vardec[0].variable.var_name)
-                            
+                        file.write(comma_vardec(list_comma_vardec))
+
                     file.write(') {\n')
                     num_tabs+=1
 
@@ -62,14 +110,27 @@ class CodeGenerator:
                     file.write(');')
                     
 
-                    for stmt in constructor.stmts:
-                        file.write(tab_before(print_stmt(stmt), num_tabs))
+                    for stmt in constructor.stmts:  #finish print_stmt function later on line 11
+                        file.write(tab_before(get_stmt(stmt), num_tabs))
 
                     num_tabs -= 1
-                    file.write('\n' + tab_before('}', num_tabs))
+                    file.write('\n' + tab_before('}\n', num_tabs))
                     
-                    #continue with method def
+                for method in class_.methods:
+                    file.write(tab_before(method.method_name + '(', num_tabs))
 
+                    if method.comma_vardec:
+                        list_comma_vardec = method.comma_vardec.vardecs
+                        file.write(comma_vardec(list_comma_vardec))
 
-                    file.write('\n}')
+                    num_tabs += 1
+                    file.write(') {\n')
+
+                    for stmt in method.stmts:
+                        file.write(tab_before(get_stmt(stmt) + ';\n', num_tabs))
+
+                    num_tabs -= 1
+                    file.write(tab_before('}\n', num_tabs))                    
+
+                file.write('\n}')
 
