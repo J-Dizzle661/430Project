@@ -466,6 +466,8 @@ class Parser():
         pos += 1
 
         # 'super'
+        token = self.read_token(pos)
+        super_args = None
         if isinstance(token, super_token):
             self.assert_token_is(pos, super_token())
             pos += 1

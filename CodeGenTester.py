@@ -11,7 +11,6 @@ test_input ='''
                 Int price;
 
                 init(Int age, Boolean isAlive, Int price){
-                    super(age, isAlive, price);
                 }
 
                 method bark(Int age, Boolean isAlive) Void{
