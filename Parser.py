@@ -466,25 +466,26 @@ class Parser():
         pos += 1
 
         # 'super'
-        self.assert_token_is(pos, super_token())
-        pos += 1
+        if isinstance(token, super_token):
+            self.assert_token_is(pos, super_token())
+            pos += 1
 
-        # '('
-        self.assert_token_is(pos, LP_Token())
-        pos += 1
+            # '('
+            self.assert_token_is(pos, LP_Token())
+            pos += 1
 
-        # comma_exp
-        comma_exp_result = self.comma_exp(pos)
-        super_args = comma_exp_result.result
-        pos = comma_exp_result.next_pos
+            # comma_exp
+            comma_exp_result = self.comma_exp(pos)
+            super_args = comma_exp_result.result
+            pos = comma_exp_result.next_pos
 
-        # ')'
-        self.assert_token_is(pos, RP_Token())
-        pos += 1
+            # ')'
+            self.assert_token_is(pos, RP_Token())
+            pos += 1
 
-        # ';'
-        self.assert_token_is(pos, SemiColon_Token())
-        pos += 1
+            # ';'
+            self.assert_token_is(pos, SemiColon_Token())
+            pos += 1
 
         # parse stmt*
         stmts = []
