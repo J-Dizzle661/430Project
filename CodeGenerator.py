@@ -31,6 +31,10 @@ def get_primary_exp(primary):
             return str(primary.value)
         case BooleanLiteral():
             return str(primary.value)
+        case IdExp():
+             return primary.name
+        case _:
+             return str('Error got ' + str(primary))
 
 def op_exp_op(current_exp):
     return get_primary_exp(current_exp.left_exp) + ' ' +  current_exp.op.op_type + ' ' + get_primary_exp(current_exp.right_exp)
@@ -74,6 +78,7 @@ class CodeGenerator:
     def code_gen(self):
         with open('JS_Code.txt', 'w') as file:
             for class_ in self.classes:
+
                 file.write(with_space('class'))
                 file.write(with_space(class_.class_name))
                 if class_.extends_name:
@@ -107,7 +112,7 @@ class CodeGenerator:
                             elif list_comma_exp:
                                 file.write(list_comma_exp[0].name)
                     
-                    file.write(');')
+                        file.write(');')
                     
 
                     for stmt in constructor.stmts:  #finish print_stmt function later on line 11
@@ -132,5 +137,8 @@ class CodeGenerator:
                     num_tabs -= 1
                     file.write(tab_before('}\n', num_tabs))                    
 
-                file.write('\n}')
+                file.write('}\n\n')
+
+            for stmt in self.stmts:
+                file.write(get_stmt(stmt) + ';\n')
 
