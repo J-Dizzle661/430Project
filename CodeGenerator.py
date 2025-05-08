@@ -79,7 +79,7 @@ class CodeGenerator:
         with open('JS_Code.txt', 'w') as file:
             for class_ in self.classes:
 
-                file.write(with_space('\nclass'))
+                file.write(with_space('class'))
                 file.write(with_space(class_.class_name))
                 if class_.extends_name:
                     file.write(with_space('extends ' + class_.extends_name ))
@@ -137,7 +137,7 @@ class CodeGenerator:
                     num_tabs -= 1
                     file.write(tab_before('}\n', num_tabs))                    
 
-                file.write('}\n')
+                file.write('}\n\n')
 
             for stmt in self.stmts:
                 file.write(get_stmt(stmt) + ';\n')
