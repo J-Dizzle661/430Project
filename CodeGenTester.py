@@ -6,7 +6,8 @@ from CodeGenerator import *
 
 test_input ='''
             class Animal{
-                init(Int price,Int age){super(); }
+                init(Int price,Int age){
+                }
             }
 
             class Dog extends Animal{

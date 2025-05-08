@@ -1,6 +1,6 @@
 class Animal {
     constructor(price, age) {
-        super();
+
     }
 }
 
@@ -9,7 +9,7 @@ class Dog extends Animal {
     isAlive;
     price;
     constructor(age, isAlive, price) {
-);
+        super(age, isAlive, price);
     }
     bark(age, isAlive) {
         5 * 5;

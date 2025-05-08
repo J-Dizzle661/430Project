@@ -83,13 +83,15 @@ class CodeGenerator:
                 file.write(with_space(class_.class_name))
                 if class_.extends_name:
                     file.write(with_space('extends ' + class_.extends_name ))
-                file.write('{\n')
+                file.write('{')
                 num_tabs = 1
 
                 for vardec in class_.vardecs:
-                    file.write(tab_before(vardec.variable.var_name + ';\n', num_tabs))
+                    file.write('\n')
+                    file.write(tab_before(vardec.variable.var_name + ';', num_tabs))
 
                 for constructor in class_.constructors:
+                    file.write('\n')
                     file.write(tab_before('constructor('))
 
                     if constructor.comma_vardec: # checks if vardecs list is not empty
