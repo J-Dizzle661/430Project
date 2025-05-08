@@ -1,3 +1,10 @@
+
+class Animal {
+    constructor(price, age) {
+        super();
+    }
+}
+
 class Dog extends Animal {
     age;
     isAlive;
@@ -16,5 +23,7 @@ class Dog extends Animal {
         let y = false;
         let z = 6 + 6;
     }
-
 }
+let i = 0;
+let j = true;
+let k = 0 + i;

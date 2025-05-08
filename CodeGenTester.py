@@ -5,14 +5,16 @@ from CodeGenerator import *
 
 
 test_input ='''
+            class Animal{
+                init(Int price,Int age){super(); }
+            }
+
             class Dog extends Animal{
                 Int age;
                 Boolean isAlive;
                 Int price;
 
-                init(Int age, Boolean isAlive, Int price){
-                    super(age, isAlive, price);
-                }
+                init(Int age, Boolean isAlive, Int price){super(isAlive, age, price); }
 
                 method bark(Int age, Boolean isAlive) Void{
                     5 * 5;
@@ -26,6 +28,11 @@ test_input ='''
                     Int z = 6 + 6;
                 }
             }
+
+            Int i = 0;
+            Boolean j = true;
+            Int k = 0 + i;
+
             '''
 
 tokenizer = Tokenizer(test_input)
