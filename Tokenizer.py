@@ -12,6 +12,10 @@ class IntLiteral_Token(Token) :
     def __init__(self, value):
         super().__init__(value)
 
+class StringLiteral_Token:
+    def __init__(self, value):
+        self.value = value
+
 class Tokenizer(Token):
     def __init__(self, input_str):
         self.input = input_str
@@ -102,6 +106,19 @@ class Tokenizer(Token):
                 self.position += len(symbol)
                 return self.symbol_map[symbol]()  
         return None
+    
+    def try_read_string_literal(self):
+        if self.input[self.position] == '"':
+            start = self.position + 1
+            self.position += 1
+            while self.position < len(self.input) and self.input[self.position] != '"':
+                self.position += 1
+            if self.position >= len(self.input):
+                raise Exception(f'Unterminated string literal starting at position {start}')
+            string_value = self.input[start:self.position]
+            self.position += 1  # skip the closing "
+            return StringLiteral_Token(string_value)
+        return None
 
     def read_Tokens(self) :
         list_tokens = []
@@ -109,7 +126,9 @@ class Tokenizer(Token):
             self.skip_whitespace()
             if self.position >= len(self.input):
                 break
-            token = self.try_read_number_token()
+            token = self.try_read_string_literal()
+            if token is None:
+                token = self.try_read_number_token()
             if token is None:
                 token = self.try_read_symbol()
             if token is None:

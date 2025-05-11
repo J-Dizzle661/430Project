@@ -42,29 +42,77 @@ def op_exp_op(current_exp):
 
 
 def get_exp(exp):
-    current_exp = exp.exp
-
-    match current_exp :
+    match exp :
         case add_exp():
-            return op_exp_op(current_exp)
+            return op_exp_op(exp)
         case mult_exp():
-            return op_exp_op(current_exp)
+            return op_exp_op(exp)
         case call_exp():
-            return op_exp_op(current_exp)
+            return op_exp_op(exp)
         case IntLiteral():
-            return str(current_exp.value)
+            return str(exp.value)
         case BooleanLiteral():
-            return str(current_exp.value)
+            return str(exp.value)
+        case StringLiteral():
+            return f'"{exp.value}"'
+        case BinOpExp():
+            return f"{get_exp(exp.left_exp)} {exp.op.op_type} {get_exp(exp.right_exp)}"
+        case IdExp():
+            return exp.name
+        case ParenExp():
+            return f"({get_exp(exp.inner)})"
+        case CallExp():
+            if isinstance(exp.func, IdExp):
+                if exp.func.name == "new":
+                    class_name = get_exp(exp.args[0])
+                    args = ', '.join(get_exp(arg) for arg in exp.args[1:])
+                    return f"new {class_name}({args})"
+                elif exp.func.name == "println":
+                    args = ', '.join(get_exp(arg) for arg in exp.args)
+                    return f"console.log({args})"
+            args = ', '.join(get_exp(arg) for arg in exp.args)
+            return f"{get_exp(exp.func)}({args})"
 
-
-def get_stmt(stmt):
+def get_stmt(stmt, num_tabs=1):
     match stmt:
         case exp_stmt():
-            return get_exp(stmt)
+            return get_exp(stmt.exp)
         case vardec_stmt():
             return 'let ' + stmt.variable.var_name
         case assign_stmt():
-            return 'let ' + stmt.variable.var_name + ' = ' + get_exp(stmt)
+            if getattr(stmt, 'from_this', False):
+                return 'this.' + stmt.variable.var_name + ' = ' + get_exp(stmt.exp)
+            else:
+                return stmt.variable.var_name + ' = ' + get_exp(stmt.exp)
+        case while_stmt():
+            return f"while ({get_exp(stmt.guard)}) " + get_stmt(stmt.stmt, num_tabs + 1)
+        case block_stmt():
+            return '{\n' + '\n'.join(tab_before(get_stmt(s, num_tabs + 1)) + ';' for s in stmt.stmts) + '\n' + tab_before('}', num_tabs)
+        case break_stmt():
+            return 'break'
+        case return_stmt():
+            return 'return ' + get_exp(stmt.exp) if stmt.exp else 'return'
+        case if_stmt():
+            if isinstance(stmt.then_stmt, block_stmt):
+                    then_js = get_stmt(stmt.then_stmt, num_tabs)
+            else:
+                then_body = get_stmt(stmt.then_stmt, num_tabs + 1)
+                then_lines = then_body.splitlines()
+                then_js = "{\n" + '\n'.join(tab_before(line, num_tabs + 1) for line in then_lines) + "\n" + tab_before("}", num_tabs + 1)
+
+            js_lines = [f"if ({get_exp(stmt.guard)}) {then_js}"]
+
+            if stmt.else_stmt:
+                if isinstance(stmt.else_stmt, block_stmt):
+                    else_js = get_stmt(stmt.else_stmt, num_tabs)
+                else:
+                    else_body = get_stmt(stmt.else_stmt, num_tabs + 1)
+                    else_lines = else_body.splitlines()
+                    else_js = "{\n" + '\n'.join(tab_before(line, num_tabs + 1) for line in else_lines) + "\n" + tab_before("}", num_tabs + 1)
+                js_lines.append(f"else {else_js}")
+
+            return '\n'.join(js_lines)
+
         
         
 
@@ -118,7 +166,7 @@ class CodeGenerator:
                     
 
                     for stmt in constructor.stmts:  #finish print_stmt function later on line 11
-                        file.write(tab_before(get_stmt(stmt), num_tabs))
+                        file.write(get_stmt(stmt, num_tabs))
 
                     num_tabs -= 1
                     file.write('\n' + tab_before('}\n', num_tabs))
@@ -134,13 +182,19 @@ class CodeGenerator:
                     file.write(') {\n')
 
                     for stmt in method.stmts:
-                        file.write(tab_before(get_stmt(stmt) + ';\n', num_tabs))
-
-                    num_tabs -= 1
-                    file.write(tab_before('}\n', num_tabs))                    
+                        js = get_stmt(stmt, num_tabs)
+                        if not js.strip().startswith(('if', 'while', 'for', 'else', '{')):
+                            js += ';'
+                        for line in js.splitlines():
+                            file.write(tab_before(line + '\n', num_tabs))
+                    num_tabs -= 1 
+                    file.write(tab_before('}\n', num_tabs))                  
 
                 file.write('}\n\n')
 
             for stmt in self.stmts:
-                file.write(get_stmt(stmt) + ';\n')
+                js = get_stmt(stmt, 0)
+                if not js.strip().startswith(('if', 'while', 'for', 'else', '{')):
+                    js += ';'
+                file.write(js + '\n')
 

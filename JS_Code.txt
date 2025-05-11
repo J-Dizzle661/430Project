@@ -19,11 +19,32 @@ class Dog extends Animal {
         true;
         10;
         let x;
-        let y = false;
-        let z = 6 + 6;
+        y = false;
+        z = 6 + 6;
+    }
+    meow(age, isAlive) {
+        this.age = 9;
+        console.log("Hello!");
+        a = (5 + 3);
+        if (age < 5) {
+            return 1;
+                }
+        else {
+            return 2;
+                }
+        d = new Dog(5, true, 50);
     }
 }
 
-let i = 0;
-let j = true;
-let k = 0 + i;
+i = 0;
+j = true;
+k = 0 + i;
+while (i < 5) {
+    i = i + 1;
+    }
+if (age < 5) {
+    return 1;
+}
+else {
+    return 2;
+}

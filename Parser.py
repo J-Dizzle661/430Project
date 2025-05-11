@@ -1,19 +1,11 @@
-from Tokenizer import Tokenizer, Id_Token, IntLiteral_Token
+from Tokenizer import Tokenizer, Id_Token, IntLiteral_Token, StringLiteral_Token
 from ReserveWords import *
 from Symbols import *
 from Operations import *
 from AST import Node
 from Productions import *
-from Expressions import Exp, IdExp, CallExp, IntLiteral, BooleanLiteral
+from Expressions import Exp, IdExp, CallExp, IntLiteral, BooleanLiteral, LessThanOp, GreaterThanOp, StringLiteral, ParenExp
 from dataclasses import dataclass
-
-@dataclass
-class LessThanOp:
-    pass
-
-@dataclass
-class GreaterThanOp:
-    pass
 
 @dataclass
 class Class_Type:
@@ -87,6 +79,9 @@ class Parser():
         #var
         if isinstance(token, Id_Token):
             return ParseResult(IdExp(token.value), start_pos + 1)
+        #string for println
+        elif isinstance(token, StringLiteral_Token):
+            return ParseResult(StringLiteral(token.value), start_pos + 1)
         #int
         elif isinstance(token, IntLiteral_Token):
             return ParseResult(IntLiteral(token.value), start_pos + 1)
@@ -120,7 +115,7 @@ class Parser():
         elif isinstance(token, LP_Token):
             e = self.exp(start_pos + 1)
             self.assert_token_is(e.next_pos, RP_Token())
-            return ParseResult(e.result, e.next_pos + 1) 
+            return ParseResult(ParenExp(e.result), e.next_pos + 1) 
         else:
             raise ParseException(f"Expected primary expression at position: {start_pos}")
         
@@ -237,14 +232,14 @@ class Parser():
         return self.comp_exp(start_pos)
     
     def vardec_parser(self, pos):
-        type_result = self.type_parser(pos)
-        id_token = self.read_token(type_result.next_pos)
+            type_result = self.type_parser(pos)
+            id_token = self.read_token(type_result.next_pos)
 
-        if not isinstance(id_token, Id_Token):
-            raise ParseException(f"Expected variable name at {type_result.next_pos}")
+            if not isinstance(id_token, Id_Token):
+                raise ParseException(f"Expected variable name at {type_result.next_pos}")
 
-        var = Variable(id_token.value)
-        return ParseResult(vardec_stmt(type_result.result, var), type_result.next_pos + 1)
+            var = Variable(id_token.value)
+            return ParseResult(vardec_stmt(type_result.result, var), type_result.next_pos + 1)
 
     def stmt(self, start_pos):
         t = self.read_token(start_pos)
@@ -322,15 +317,10 @@ class Parser():
                 except ParseException as e:
                     raise
             return ParseResult(block_stmt(stmts), pos + 1)
-
-        # assignment (including field assignments)
-        if isinstance(t, (Id_Token, this_token)):
-            pos = start_pos
-            var = None
             
             # Handle field access (this.field)
-            if isinstance(t, this_token):
-                pos += 1
+        if isinstance(t, this_token):
+                pos = start_pos + 1
                 self.assert_token_is(pos, Dot_Token())
                 pos += 1
                 field_token = self.read_token(pos)
@@ -338,11 +328,15 @@ class Parser():
                     raise ParseException(f"Expected field name after 'this.' at position {pos}")
                 var = Variable(field_token.value)
                 pos += 1
-            else:
-                var = Variable(t.value)
-                pos += 1
+                if isinstance(self.read_token(pos), Equals_Token):
+                    pos += 1
+                    e = self.exp(pos)
+                    self.assert_token_is(e.next_pos, SemiColon_Token())
+                    return ParseResult(assign_stmt(var, e.result, from_this=True), e.next_pos + 1)
 
-            # Check for equals
+        elif isinstance(t, Id_Token):
+            pos = start_pos + 1
+            var = Variable(t.value)
             if isinstance(self.read_token(pos), Equals_Token):
                 pos += 1
                 e = self.exp(pos)

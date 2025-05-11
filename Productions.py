@@ -22,9 +22,10 @@ class comma_vardec_stmt(Stmt):  #vardecs should be a list
     
 
 class assign_stmt(Stmt):
-    def __init__(self, variable, exp):
+    def __init__(self, variable, exp, from_this=False):
         self.variable = variable
         self.exp = exp
+        self.from_this = from_this
 
 class while_stmt(Stmt):
     def __init__(self, guard, stmt):

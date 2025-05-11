@@ -19,3 +19,19 @@ class IntLiteral(Exp):
 @dataclass
 class BooleanLiteral(Exp):
     value: bool
+
+@dataclass
+class LessThanOp:
+    op_type: str = "<"
+
+@dataclass
+class GreaterThanOp:
+    op_type: str = ">"
+
+@dataclass
+class StringLiteral(Exp):
+    value: str
+
+@dataclass
+class ParenExp(Exp):
+    inner: Exp

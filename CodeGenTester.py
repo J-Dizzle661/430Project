@@ -28,11 +28,39 @@ test_input ='''
                     Bool y = false;
                     Int z = 6 + 6;
                 }
+
+                method meow(Int age, Boolean isAlive) Void {
+                    this.age = 9;
+
+                    println("Hello!");
+
+                    Int a = (5 + 3);
+
+                    if (age < 5) {
+                        return 1;
+                    } 
+                    else {
+                        return 2;
+                    }
+
+                    Dog d = new Dog(5, true, 50);
+                }       
             }
 
             Int i = 0;
             Boolean j = true;
             Int k = 0 + i;
+
+            while(i < 5) {
+                i = i + 1;
+            }
+
+            if (age < 5) {
+                return 1;
+            } 
+            else {
+                return 2;
+            }
 
             '''
 
