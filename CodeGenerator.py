@@ -123,10 +123,6 @@ def get_stmt(stmt, num_tabs=1):
 
             return '\n'.join(js_lines)
 
-        
-        
-
-
 class CodeGenerator:
     def __init__(self, program):
         self.program = program

@@ -20,8 +20,7 @@ input_code = '''
                 method speak() Void { println("Bark"); }
                 }
 
-                
-
+            
                 Animal cat;
                 Animal dog;
                 cat = new Cat(5);

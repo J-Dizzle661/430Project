@@ -1,50 +1,33 @@
 class Animal {
-    age;
-    constructor(age) {
-this.age = age
+    constructor() {
+
     }
     speak() {
-        console.log("PC Noises");
-    }
-    getAge() {
-        return this.age;
+        console.log(0);
     }
 }
 
 class Cat extends Animal {
-    constructor(age) {
-        super(age);
+    constructor() {
+        super();
     }
     speak() {
-        console.log("Meow");
+        console.log(1);
     }
 }
 
 class Dog extends Animal {
-    constructor(age) {
-        super(age);
+    constructor() {
+        super();
     }
     speak() {
-        console.log("Bark");
+        console.log(2);
     }
 }
 
 let cat;
 let dog;
-cat = new Cat(5);
-dog = new Dog(6);
+cat = new Cat();
+dog = new Dog();
 cat.speak();
 dog.speak();
-i = 0;
-if (i < 1) {
-    i = 5;
-}
-else {
-    console.log("Failure");
-}
-while (i > 0) {
-    i = i - 1;
-    }
-console.log(i);
-console.log(cat.getAge());
-console.log(dog.getAge());
