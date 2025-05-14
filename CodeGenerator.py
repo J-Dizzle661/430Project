@@ -37,7 +37,7 @@ def get_primary_exp(primary):
         case IntLiteral():
             return str(primary.value)
         case BooleanLiteral():
-            return str(primary.value)
+            return str(primary.value).lower()
         case IdExp():
              return primary.name
         case _:

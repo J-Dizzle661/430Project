@@ -33,6 +33,8 @@ input_code = '''
 
                 else {println("Failure");} 
 
+                {Int j = 10; Boolean bool = false;}
+
                 while (i > 0){i = i - 1;}
                 println(i);
                 println(cat.getAge());
