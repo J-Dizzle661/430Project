@@ -55,7 +55,6 @@ def get_exp(exp):
         case mult_exp():
             return op_exp_op(exp)
         case call_exp():
-            print('im here')
             if get_exp(exp.left_exp) == 'this':
                 return f'{get_exp(exp.left_exp)}{exp.op.op_type}{exp.right_exp[0].name}' 
             else:
