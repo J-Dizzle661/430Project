@@ -170,9 +170,8 @@ class CodeGenerator:
                     
                         file.write(');')
                     
-
-                    for stmt in constructor.stmts:  #finish print_stmt function later on line 11
-                        file.write(get_stmt(stmt, num_tabs))
+                    for stmt in constructor.stmts:
+                        file.write(tab_before(get_stmt(stmt, num_tabs), num_tabs) + ';\n')
 
                     num_tabs -= 1
                     file.write('\n' + tab_before('}\n', num_tabs))

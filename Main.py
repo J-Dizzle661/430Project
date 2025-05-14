@@ -13,24 +13,26 @@ if __name__ == "__main__":
     input_code ='''
             class Animal {
                 Int age;
-                init(Int age) {this.age = age; }
+                Int weight;
+                init(Int age, Int weight) {this.age = age; this.weight = weight; }
                 method speak() Void { println("PC Noises"); }
                 method getAge() Int { return this.age; }
+                method getWeight() Int { return this.weight; }
                 }
                 class Cat extends Animal {
-                init(Int age) { super(age); }
+                init(Int age, Int weight) { super(age, weight); }
                 method speak() Void { println("Meow"); }
                 }
                 class Dog extends Animal {
-                init(Int age) { super(age); }
+                init(Int age, Int weight) { super(age, weight); }
                 method speak() Void { println("Bark"); }
                 }
 
             
                 Animal cat;
                 Animal dog;
-                cat = new Cat(5);
-                dog = new Dog(6);
+                cat = new Cat(5, 30);
+                dog = new Dog(6, 60);
                 cat.speak();
                 dog.speak();
                 int i = 0;
@@ -45,5 +47,7 @@ if __name__ == "__main__":
                 println(i);
                 println(cat.getAge());
                 println(dog.getAge());
+                println(cat.getWeight());
+                println(dog.getWeight());
                 '''
     main(input_code)
