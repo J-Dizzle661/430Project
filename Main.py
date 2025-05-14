@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
                 else {println("Failure");} 
 
-                {Int j = 10; Boolean bool = false;}
+                {Int j = 10; Boolean bool = false; Boolean otherBool = true;}
 
                 while (i > 0){i = i - 1;}
                 println(i);

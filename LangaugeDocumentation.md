@@ -24,20 +24,19 @@ class Dog extends Animal {
     init() { super(); }
     method speak() Void { println("Bark"); }
     }
-}
 ```
 *Explanation:* This shows how to define classes, constructors , and methods. `Cat` inherits from `Animal` and overrides the `speak` method.
 
 ### Example: Variable Declaration and Assignment
 ```poop
-let cat;
+Animal cat;
 cat = new Cat();
 ```
 *Explanation:* Variables are declared with their type, and objects are instantiated with `new`.
 
 ### Example: Method Calls and Polymorphism
 ```poop
-Animal c = new Cat();
+cat = new Cat();
 c.speak(); // prints "Meow"
 
 ```
@@ -57,16 +56,21 @@ Our biggest challenges while working on this project was the parser. This was du
 I would argue that what we needed to do differently was spend more time undertanding the low-level code and truly understand the goal of our compiler before we started to write the parser.
 
 ## 4. How do I compile your compiler?
-Make sure you have the latests version of python downloaded onto you computer: 
+- Make sure you have the latests version of python downloaded onto you computer: 
 https://www.python.org/downloads/
-Once that is done, and since python is an interpreted language, compiling never occurs
-If you are using vs code, I also recommend downlaoding the python and python debugger extensions. 
+- Once that is done, and since python is an interpreted language, compiling never occurs
+- If you are using vs code, I also recommend downlaoding the python and python debugger extensions. 
 
 ## 5. How do I run your compiler?
-First, make sure that in the terminal you have used cd (change directory) to change the directory folder to COMP430 Project
-Then run the following command:
+- First, make sure that in the terminal you have used cd (change directory) to change the directory folder to COMP430 Project
+- Edit the input code to you liking
+- Then run the following command:
 ```poop
-python CodeGenTester.py
+python Main.py
+```
+- Afterward run this in node.js:
+```poop
+JS_Code.js
 ```
 
 ## 6. Formal syntax definition
