@@ -602,9 +602,9 @@ def build_exp_node(exp):
     node = Node(exp)
 
     if isinstance(exp, BinOpExp):
-        node.add_child(build_exp_node(exp.left))
+        node.add_child(build_exp_node(exp.left_exp))
         node.add_child(Node(exp.op))
-        node.add_child(build_exp_node(exp.right))
+        node.add_child(build_exp_node(exp.right_exp))
 
     elif isinstance(exp, IdExp):
         pass
