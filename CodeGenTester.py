@@ -6,22 +6,26 @@ import subprocess
 
 input_code = '''
             class Animal {
-                init() { }
+                Int age;
+                init(Int age) {this.age = age; }
                 method speak() Void { println("PC Noises"); }
+                method getAge() Int { return this.age; }
                 }
                 class Cat extends Animal {
-                init() { super(); }
+                init(Int age) { super(age); }
                 method speak() Void { println("Meow"); }
                 }
                 class Dog extends Animal {
-                init() { super(); }
+                init(Int age) { super(age); }
                 method speak() Void { println("Bark"); }
                 }
 
+                
+
                 Animal cat;
                 Animal dog;
-                cat = new Cat();
-                dog = new Dog();
+                cat = new Cat(5);
+                dog = new Dog(6);
                 cat.speak();
                 dog.speak();
                 int i = 0;
@@ -32,6 +36,8 @@ input_code = '''
 
                 while (i > 0){i = i - 1;}
                 println(i);
+                println(cat.getAge());
+                println(dog.getAge());
             '''
 class TestCodeGen(unittest.TestCase):
     tokenizer = Tokenizer(input_code)
@@ -41,7 +47,7 @@ class TestCodeGen(unittest.TestCase):
 
     def testCodeRun(self): # produces JS_Code.js file and runs in NodeJS, then console output is stores in js_output
         js_output = subprocess.run(['node', 'JS_Code.js'], capture_output= True, text = True)
-        expected_output = 'Meow\nBark\n0\n'
+        expected_output = 'Meow\nBark\n0\n5\n6\n'
         self.assertEqual(expected_output, js_output.stdout)
 
 if __name__ == '__main__':

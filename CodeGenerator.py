@@ -30,7 +30,7 @@ def get_comma_exp(exps):
     for exp in exps:
         return_str += (get_exp(exp) + ', ')
 
-    return return_str[:len(return_str) - 2]    
+    return f'{return_str[:len(return_str) - 2]}'  
 
 def get_primary_exp(primary):
      match primary:
@@ -55,7 +55,11 @@ def get_exp(exp):
         case mult_exp():
             return op_exp_op(exp)
         case call_exp():
-            return f'{get_exp(exp.left_exp)}{exp.op.op_type}{exp.right_exp[0].name}({get_comma_exp(exp.right_exp[1:])})'
+            print('im here')
+            if get_exp(exp.left_exp) == 'this':
+                return f'{get_exp(exp.left_exp)}{exp.op.op_type}{exp.right_exp[0].name}' 
+            else:
+                return f'{get_exp(exp.left_exp)}{exp.op.op_type}{exp.right_exp[0].name}({get_comma_exp(exp.right_exp[1:])})'
         case IntLiteral():
             return str(exp.value)
         case BooleanLiteral():

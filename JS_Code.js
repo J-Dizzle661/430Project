@@ -1,15 +1,19 @@
 class Animal {
-    constructor() {
-
+    age;
+    constructor(age) {
+this.age = age
     }
     speak() {
         console.log("PC Noises");
     }
+    getAge() {
+        return this.age;
+    }
 }
 
 class Cat extends Animal {
-    constructor() {
-        super();
+    constructor(age) {
+        super(age);
     }
     speak() {
         console.log("Meow");
@@ -17,8 +21,8 @@ class Cat extends Animal {
 }
 
 class Dog extends Animal {
-    constructor() {
-        super();
+    constructor(age) {
+        super(age);
     }
     speak() {
         console.log("Bark");
@@ -27,8 +31,8 @@ class Dog extends Animal {
 
 let cat;
 let dog;
-cat = new Cat();
-dog = new Dog();
+cat = new Cat(5);
+dog = new Dog(6);
 cat.speak();
 dog.speak();
 i = 0;
@@ -42,3 +46,5 @@ while (i > 0) {
     i = i - 1;
     }
 console.log(i);
+console.log(cat.getAge());
+console.log(dog.getAge());
