@@ -24,7 +24,6 @@ class Dog extends Animal {
     init() { super(); }
     method speak() Void { println("Bark"); }
     }
-}
 ```
 *Explanation:* This shows how to define classes, constructors , and methods. `Cat` inherits from `Animal` and overrides the `speak` method.
 
