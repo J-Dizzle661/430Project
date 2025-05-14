@@ -2,72 +2,47 @@ import unittest
 from Tokenizer import Tokenizer
 from Parser import Parser
 from CodeGenerator import *
+import subprocess
 
-
-test_input ='''
-            class Animal{
-                init(Int price,Int age){
+input_code = '''
+            class Animal {
+                init() { }
+                method speak() Void { println("PC Noises"); }
                 }
-            }
-
-            class Dog extends Animal{
-                Int age;
-                Boolean isAlive;
-                Int price;
-
-                init(Int age, Boolean isAlive, Int price){super(isAlive, age, price); }
-
-                method bark(Int age, Boolean isAlive) Void{
-                    5 * 5;
-                    2 * 7;
-                    7 + 9;
-                    false;
-                    true;
-                    10;
-                    Int x;
-                    Bool y = false;
-                    Int z = 6 + 6;
+                class Cat extends Animal {
+                init() { super(); }
+                method speak() Void { println("Meow"); }
+                }
+                class Dog extends Animal {
+                init() { super(); }
+                method speak() Void { println("Bark"); }
                 }
 
-                method meow(Int age, Boolean isAlive) Void {
-                    this.age = 9;
+                Animal cat;
+                Animal dog;
+                cat = new Cat();
+                dog = new Dog();
+                cat.speak();
+                dog.speak();
+                int i = 0;
 
-                    println("Hello!");
+                if(i < 1){i = 5;}
 
-                    Int a = (5 + 3);
+                else {println("Failure");} 
 
-                    if (age < 5) {
-                        return 1;
-                    } 
-                    else {
-                        return 2;
-                    }
-
-                    Dog d = new Dog(5, true, 50);
-                }       
-            }
-
-            Int i = 0;
-            Boolean j = true;
-            Int k = 0 + i;
-
-            while(i < 5) {
-                i = i + 1;
-            }
-
-            if (age < 5) {
-                return 1;
-            } 
-            else {
-                return 2;
-            }
-
+                while (i > 0){i = i - 1;}
+                println(i);
             '''
+class TestCodeGen(unittest.TestCase):
+    tokenizer = Tokenizer(input_code)
+    parser = Parser(tokenizer.read_Tokens())
+    code_gen = CodeGenerator((parser.program().result))
+    code_gen.code_gen()
 
-tokenizer = Tokenizer(test_input)
-tokens = tokenizer.read_Tokens()
-parser = Parser(tokens)
-program = parser.program().result
+    def testCodeRun(self): # produces JS_Code.js file and runs in NodeJS, then console output is stores in js_output
+        js_output = subprocess.run(['node', 'JS_Code.js'], capture_output= True, text = True)
+        expected_output = 'Meow\nBark\n0\n'
+        self.assertEqual(expected_output, js_output.stdout)
 
-codeGen = CodeGenerator(program)
-codeGen.code_gen()
+if __name__ == '__main__':
+    unittest.main()

@@ -25,6 +25,13 @@ def comma_vardec(list_comma_vardec): # returns comma vardec as a string in JS fo
 
     return vardec
 
+def get_comma_exp(exps):
+    return_str = ''
+    for exp in exps:
+        return_str += (get_exp(exp) + ', ')
+
+    return return_str[:len(return_str) - 2]    
+
 def get_primary_exp(primary):
      match primary:
         case IntLiteral():
@@ -48,7 +55,7 @@ def get_exp(exp):
         case mult_exp():
             return op_exp_op(exp)
         case call_exp():
-            return op_exp_op(exp)
+            return f'{get_exp(exp.left_exp)}{exp.op.op_type}{exp.right_exp[0].name}({get_comma_exp(exp.right_exp[1:])})'
         case IntLiteral():
             return str(exp.value)
         case BooleanLiteral():
@@ -124,7 +131,7 @@ class CodeGenerator:
         self.stmts = program.stmts
 
     def code_gen(self):
-        with open('JS_Code.txt', 'w') as file:
+        with open('JS_Code.js', 'w') as file:
             for class_ in self.classes:
 
                 file.write(with_space('class'))

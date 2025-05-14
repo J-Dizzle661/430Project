@@ -139,16 +139,16 @@ class Parser():
                         args = []
                         if isinstance(self.read_token(pos), RP_Token):
                             pos += 1
-                            result = CallExp(result, [IdExp(field_token.value)])
+                            result = call_exp(result, [IdExp(field_token.value)])
                             continue
                         args_parse = self.comma_exp(pos)
                         args = args_parse.result
                         pos = args_parse.next_pos
                         self.assert_token_is(pos, RP_Token())
                         pos += 1
-                        result = CallExp(result, [IdExp(field_token.value)] + args)
+                        result = call_exp(result, [IdExp(field_token.value)] + args)
                     else:
-                        result = CallExp(result, [IdExp(field_token.value)])
+                        result = call_exp(result, [IdExp(field_token.value)])
                 elif isinstance(t, LP_Token):
                     pos += 1
                     args = []
