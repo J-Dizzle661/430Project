@@ -51,6 +51,7 @@ else {
 {
     j = 10;
     bool = false;
+    otherBool = true;
 }
 while (i > 0) {
     i = i - 1;
