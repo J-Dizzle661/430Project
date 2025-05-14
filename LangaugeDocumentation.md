@@ -13,20 +13,16 @@ We intentionally designed the language to be class-based and object-oriented, wi
 ### Example: Class Definition and Inheritance
 ```poop
 class Animal {
-    constructor() {
-
+    init() { }
+    method speak() Void { println("PC Noises"); }
     }
-    speak() {
-        console.log("PC Noises");
-    }
-}
-
 class Cat extends Animal {
-    constructor() {
-        super();
+    init() { super(); }
+    method speak() Void { println("Meow"); }
     }
-    speak() {
-        console.log("Meow");
+class Dog extends Animal {
+    init() { super(); }
+    method speak() Void { println("Bark"); }
     }
 }
 ```
@@ -41,11 +37,13 @@ cat = new Cat();
 
 ### Example: Method Calls and Polymorphism
 ```poop
-cat.speak();
+Animal c = new Cat();
+c.speak(); // prints "Meow"
+
 ```
 *Explanation:* Method calls use dot notation. The correct method is called based on the object's runtime type (polymorphism).
 
-### Limitation Example: No Comments or Advanced Types
+### Limitation Example: No Comments
 ```poop
 // This is not allowed in pOOP
 /* Nor is this */
@@ -61,7 +59,7 @@ I would argue that what we needed to do differently was spend more time undertan
 ## 4. How do I compile your compiler?
 Make sure you have the latests version of python downloaded onto you computer: 
 https://www.python.org/downloads/
-Once that is done, the program should compile automatically
+Once that is done, and since python is an interpreted language, compiling never occurs
 If you are using vs code, I also recommend downlaoding the python and python debugger extensions. 
 
 ## 5. How do I run your compiler?
@@ -73,7 +71,7 @@ python CodeGenTester.py
 
 ## 6. Formal syntax definition
 Concrete Syntax:
-
+```
 var is a variable
 classname is the name of a class
 methodname is the name of a method
@@ -130,3 +128,4 @@ classdef ::= `class` classname [`extends` classname] `{`
              `}`
 
 program ::= classdef* stmt+  stmt+ is the entry point
+```
